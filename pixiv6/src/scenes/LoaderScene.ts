@@ -35,6 +35,7 @@ export default class LoaderScene extends BaseScene {
         this.scene.addChild(this.simpleLoaderContainer);
         new AlphaFadeInEffect(this.simpleLoaderContainer, this.app.ticker);
         Loader.shared.add('UI', 'assets/atlases/ui.json');
+        Loader.shared.add('PACMAN', 'assets/atlases/pacman2.json');
         // Loader.shared.add('windmill', 'assets/atlases/windmill.json');
         Loader.shared.add('spineboy', 'assets/atlases/spineboy.json');
         Loader.shared.add({ name: "Scalter-SerifCondensed", url: "./assets/fonts/Scalter-SerifCondensed.otf" });

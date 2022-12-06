@@ -19,6 +19,7 @@ import LayoutManager from "app/layoutManager/LayoutManager";
 import {PivotType} from "app/controls/MainControl";
 import choiceSceneLayout from "app/scenes/ChoiceScene.layout";
 import SpineControlScene from "app/scenes/SpineControlScene";
+import GameScene from "app/scenes/GameScene";
 
 export default class ChoiceScene extends BaseScene {
     @inject(FullScreenButtonControl, ChoiceScene.createFullScreenButton)
@@ -32,7 +33,8 @@ export default class ChoiceScene extends BaseScene {
         fontSize: 24
     };
     protected buttons = [
-        new TextButtonControl("Dev animation scene", {target: DevAnimationScene, style: this.style, align:PivotType.TL}).name("item1_1"),
+        new TextButtonControl("Game Example", {target: GameScene, style: this.style, align:PivotType.TL}).name("item1_1"),
+        // new TextButtonControl("Dev animation scene", {target: DevAnimationScene, style: this.style, align:PivotType.TL}).name("item1_1"),
         new TextButtonControl("Gsap dev animation scene", {target: GsapDevAnimationScene, style: this.style, align:PivotType.TL}).name("item1_2"),
         new TextButtonControl("Spine scene", {target: SpineScene, style: this.style, align:PivotType.TL}).name("item2_1"),
         new TextButtonControl("Spine control scene", {target: SpineControlScene, style: this.style, align:PivotType.TL}).name("item2_2"),
