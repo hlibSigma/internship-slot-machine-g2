@@ -1,0 +1,23 @@
+{
+    "extends": "../tsconfig.json",
+    "compilerOptions": {
+        "baseUrl": "./",
+        "module": "commonjs",
+        "experimentalDecorators": true,
+        "strictPropertyInitialization": false,
+        "isolatedModules": false,
+        "strict": false,
+        "noImplicitAny": false,
+        "typeRoots" : [
+            "../node_modules/@types",
+            "../src/typing/index.d.ts"
+        ]
+    },
+    "exclude": [
+        "../node_modules"
+    ],
+    "include": [
+        "./**/*.ts",
+        "../src/typing/index.d.ts"
+    ]
+}

@@ -1,0 +1,10 @@
+@font-face {
+    font-family: "Scalter-SerifCondensed";
+    src: local("Scalter-SerifCondensed"), url("./../fonts/Scalter-SerifCondensed.otf") format("otf");
+}
+
+body {
+    background-color: white;
+    font-size: 24px;
+    font-family: "Scalter-SerifCondensed", serif;
+}
