@@ -127,6 +127,20 @@ class ChoiceSceneLayout {
                                 extend: "item",
                             }
                         ]
+                    },
+                    {
+                        name: "line2",
+                        extend: "line",
+                        layouts: [
+                            {
+                                name: "item5_1",
+                                extend: "item",
+                            },
+                            {
+                                name: "item5_2",
+                                extend: "item",
+                            }
+                        ]
                     }
                 ],
             }

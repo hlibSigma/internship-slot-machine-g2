@@ -34,14 +34,14 @@ export default class ChoiceScene extends BaseScene {
     };
     protected buttons = [
         new TextButtonControl("Game Example", {target: GameScene, style: this.style, align:PivotType.TL}).name("item1_1"),
-        // new TextButtonControl("Dev animation scene", {target: DevAnimationScene, style: this.style, align:PivotType.TL}).name("item1_1"),
-        new TextButtonControl("Gsap dev animation scene", {target: GsapDevAnimationScene, style: this.style, align:PivotType.TL}).name("item1_2"),
-        new TextButtonControl("Spine scene", {target: SpineScene, style: this.style, align:PivotType.TL}).name("item2_1"),
-        new TextButtonControl("Spine control scene", {target: SpineControlScene, style: this.style, align:PivotType.TL}).name("item2_2"),
-        new TextButtonControl("Shader scene", {target: ShaderAnimationScene, style: this.style, align:PivotType.TL}).name("item3_1"),
-        new TextButtonControl("Frag Shader scene", {target: FragShaderAnimationScene, style: this.style, align:PivotType.TL}).name("item3_2"),
-        new TextButtonControl("Font Scene", {target: FontScene, style: this.style, align:PivotType.TL}).name("item4_1"),
-        new TextButtonControl("Layout Scene", {target: LayoutScene, style: this.style, align:PivotType.TL}).name("item4_2"),
+        new TextButtonControl("Spine scene", {target: SpineScene, style: this.style, align:PivotType.TL}).name("item1_2"),
+        new TextButtonControl("Spine control scene", {target: SpineControlScene, style: this.style, align:PivotType.TL}).name("item2_1"),
+        new TextButtonControl("Shader scene", {target: ShaderAnimationScene, style: this.style, align:PivotType.TL}).name("item2_2"),
+        new TextButtonControl("Frag Shader scene", {target: FragShaderAnimationScene, style: this.style, align:PivotType.TL}).name("item3_1"),
+        new TextButtonControl("Font Scene", {target: FontScene, style: this.style, align:PivotType.TL}).name("item3_2"),
+        new TextButtonControl("Layout Scene", {target: LayoutScene, style: this.style, align:PivotType.TL}).name("item4_1"),
+        new TextButtonControl("Dev animation scene", {target: DevAnimationScene, style: this.style, align:PivotType.TL}).name("item4_2"),
+        new TextButtonControl("Gsap dev animation scene", {target: GsapDevAnimationScene, style: this.style, align:PivotType.TL}).name("item5_1"),
     ];
 
     compose():void {

@@ -15,6 +15,25 @@ export default class DevController {
         this.setupStats();
         const gui = new GUI();
         this.setupGeneralHooks(gui);
+        let target = {
+            left:()=>{
+                console.log("left");
+                gameModel.updateOrientation.emit("left");
+            },
+            right:()=>{
+                console.log("right");
+                gameModel.updateOrientation.emit("right");
+            }
+        };
+        gui.add(target, "left");
+        gui.add(target, "right");
+        gui.add({speedFactor:3}, "speedFactor").onChange(value => {
+            console.log("value", value);
+            gameModel.setSpeedFactor.emit(value);
+        });
+        gui.add({run:()=>{
+            gameModel.devAnimation.run.emit();
+        }}, "run");
         gui.add({
             gameLayoutTest: () => {
                 gameModel.updateLayout.emit({

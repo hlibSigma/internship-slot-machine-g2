@@ -44,13 +44,21 @@ export default class GsapDevAnimationScene extends BaseScene {
 
         this.sprite.scale.set(0.5);
         gsap.to(this.sprite.scale, {
-            duration: 0.5, ease: "sine.inOut", y: 1.5, yoyo:true, repeat:-1
+            duration: 0.5, ease: "power1.out", y: 1.5, yoyo:true, repeat:-1
         });
         setTimeout(()=>{
             gsap.to(this.sprite.scale, {
                 duration: 0.5, ease: "sine.inOut", x: 1.5, yoyo:true, repeat:-1
             });
         }, 250);
+        this.sprite.position.x = 100;
+        gameModel.devAnimation.run.add(value => {
+            this.sprite.position.x = 300;
+            gsap.to(this.sprite.position, {
+                duration: 2, x: 1500, ease:"elastic.out(1, 0.3)"
+            });
+        }, this);
+
         this.scene.addChild(
             this.sprite,
         );
@@ -58,7 +66,7 @@ export default class GsapDevAnimationScene extends BaseScene {
 
     protected onResize(gameSize:GameSize) {
         super.onResize(gameSize);
-        this.sprite.x = gameSize.width * .5;
+        // this.sprite.x = gameSize.width * .5;
         this.sprite.y = gameSize.height * .5;
         this.fullScreenButton.container.x = gameSize.width * .785;
         this.fullScreenButton.container.y = gameSize.height * .13;

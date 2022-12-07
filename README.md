@@ -18,13 +18,17 @@ This game template contains:
   - Base scenes for start.
 
 
-## Pre instal Setup:
+## Pre-install Setup:
+- Be sure that `ffmpeg` is present in terminal (`brew install ffmpeg` for mac).
 - Install [ImageMagic](http://imagemagick.org/) with "Install legacy utilities" checked during instalation.
 - Install [Node](http://nodejs.org/)
+- `npm install`
+- `npm run build-assets`
+- `npm run build:dev`
+- `npm run serve`
 
 
-
-##help resources
+## help resources
 **portable node**: https://sourceforge.net/projects/nodejsportable/
 **sqlLite**: https://www.sqlite.org/
  

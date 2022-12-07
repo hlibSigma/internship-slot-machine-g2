@@ -7,8 +7,15 @@ import dependencyManager from "app/model/injection/InjectDecorator";
 
 type InjectionType<T extends MainControl> = Function & {prototype:T};
 
+export type TOrientation = "down" | "up" | "left" | "right";
+
 export class GameModel {
 
+    public readonly updateOrientation:Signal<TOrientation> = new Signal<TOrientation>();
+    public readonly setSpeedFactor:Signal<number> = new Signal<number>();
+    public readonly devAnimation = {
+        run:new Signal<void>(),
+    };
     public readonly updateLayout:Signal<GameSize> = new Signal<GameSize>();
     public readonly pauseGame:Signal<{pause:boolean}> = new Signal<{pause:boolean}>();
     private howler:Howl = <any>{};

@@ -9,15 +9,18 @@ import {Graphics} from "@pixi/graphics";
 import {Text} from "@pixi/text";
 import StrictResourcesHelper from "app/pixi/StrictResourcesHelper";
 import {AnimatedSprite} from "@pixi/sprite-animated";
+import gameModel, {TOrientation} from "app/model/GameModel";
 
 export default class GameScene extends BaseScene {
     private readonly vector: Vector = new Vector(0.1, 0.1);
     private readonly dots: Array<Container> = [];
     // private readonly pacman: Sprite = new Sprite();
-    private pacman: AnimatedSprite = {} as AnimatedSprite;// = new AnimatedSprite([]);
+    // private pacman: AnimatedSprite = {} as AnimatedSprite;// = new AnimatedSprite([]);
+    private pacman: Sprite = new Sprite();// = new AnimatedSprite([]);
     private scoresCounter: number = 0;
     private dotRadius: number = 15;
     private scores: Text = new Text("");
+    private speedFactor = 3;
 
     compose(): void {
         const textButtonControl = new TextButtonControl("Back");
@@ -25,28 +28,57 @@ export default class GameScene extends BaseScene {
         textButtonControl.container.position.set(100, 100);
         textButtonControl.onClick.add(this.onBackBtnClick, this);
         document.body.addEventListener("keypress", (e) => {
-            const vector = this.vector;
+            let data:TOrientation = "down";
             console.log(e.type, e.key);
-            let offset = 0.25;
-            switch (e.key) {
+            switch (e.key.toUpperCase()) {
                 case "A":
-                    vector.x -= offset;
+                    data = "left";
                     break;
                 case "D":
-                    vector.x += offset;
+                    data = "right";
                     break;
                 case "W":
-                    vector.y -= offset;
+                    data = "up";
                     break;
                 case "S":
-                    vector.y += offset;
-                    break;
+                    data = "down";
+                break;
                 default:
                     return;
             }
-            vector.normalize();
-            console.log(vector);
+            this.onUpdateOrientation(data)
         });
+
+        gameModel.updateOrientation.add(this.onUpdateOrientation, this);
+        gameModel.setSpeedFactor.add(this.onSetSpeedFactor, this);
+    }
+
+    private onSetSpeedFactor(speedFactor:number) {
+        this.speedFactor = speedFactor;
+    }
+
+    private onUpdateOrientation(data:TOrientation) {
+        const vector = this.vector;
+        console.log("orientation", data);
+        let offset = 0.25;
+        switch (data) {
+            case "left":
+                vector.x -= offset;
+                break;
+            case "right":
+                vector.x += offset;
+                break;
+            case "up":
+                vector.y -= offset;
+                break;
+            case "down":
+                vector.y += offset;
+                break;
+            default:
+                return;
+        }
+        vector.normalize();
+        console.log(vector);
     }
 
     activate() {
@@ -104,11 +136,11 @@ export default class GameScene extends BaseScene {
         // const spriteBG = new Sprite(bgTexture);
         // const pacman = new Sprite(pacmanTexture1);
         const pacman = this.pacman;
-        // this.pacman.texture = pacmanTexture1;
-        this.pacman.animationSpeed = 1;
-        pacman.textures = [
+        this.pacman.texture = pacmanTexture1;
+        // this.pacman.animationSpeed = 1;
+/*        pacman.textures = [
             pacmanTexture1, pacmanTexture2
-        ];
+        ];*/
         const dots = [];
         pacman.anchor.x = 0.5;
         pacman.anchor.y = 0.5;
@@ -150,9 +182,9 @@ export default class GameScene extends BaseScene {
             }
         }
         //pacman animation setup:
-        /*setInterval(() => {
+        setInterval(() => {
             pacman.texture = pacman.texture === pacmanTexture2 ? pacmanTexture1 : pacmanTexture2;
-        }, 300);*/
+        }, 300);
         //game play setup:
 
 
@@ -173,7 +205,7 @@ export default class GameScene extends BaseScene {
 
     protected onUpdate(delta: number) {
         super.onUpdate(delta);
-        this.pacman.update(delta);
+        // this.pacman.update(delta);
         this.checkMath();
         this.updatePositions();
     }
@@ -194,12 +226,13 @@ export default class GameScene extends BaseScene {
         console.log("updatePositions", this.vector);
         const pacman = this.pacman;
         const vector = this.vector;
-        pacman.position.x += vector.x * 3;
-        pacman.position.y += vector.y * 3;
+        pacman.position.x += vector.x * this.speedFactor;
+        pacman.position.y += vector.y * this.speedFactor;
         // vector.mult(0.98);
         pacman.position.x = (800 + pacman.position.x) % 800;
         pacman.position.y = (600 + pacman.position.y) % 600;
 
         pacman.rotation = vector.angle();
     }
+
 }
