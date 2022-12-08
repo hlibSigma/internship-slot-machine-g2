@@ -1,7 +1,8 @@
 {
   "src": [
     "./assets/sounds/SOUND_FILE.mp3",
-    "./assets/sounds/SOUND_FILE.ogg"
+    "./assets/sounds/SOUND_FILE.ogg",
+    "./assets/sounds/SOUND_FILE.wav"
   ],
   "sprite": {
     "fail": [
