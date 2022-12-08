@@ -33,7 +33,7 @@ let opts = {
     minlength: 0.1,
     channels: 2,
     bitrate: 96,
-    export: 'mp3,ogg',
+    export: 'mp3,ogg,wav',
     gap: 0.5,
     loop: loops,
     logger: winston
