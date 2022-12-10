@@ -6,12 +6,13 @@ import {Container} from "@pixi/display";
 import {Sprite} from "@pixi/sprite";
 import {Graphics} from "@pixi/graphics";
 import {Text} from "@pixi/text";
-import StrictResourcesHelper from "app/pixi/StrictResourcesHelper";
 import {AnimatedSprite} from "@pixi/sprite-animated";
 import gameModel, {GameSize, TOrientation} from "app/model/GameModel";
 import {inject} from "app/model/injection/InjectDecorator";
 import LayoutManager, {PartialLayout} from "app/layoutManager/LayoutManager";
 import gsap from "gsap";
+import {Loader} from "@pixi/loaders";
+import {Texture} from "@pixi/core";
 
 export default class GameScene extends BaseScene {
     private readonly layouts: PartialLayout = {
@@ -56,9 +57,7 @@ export default class GameScene extends BaseScene {
 
     private readonly vector: Vector = new Vector(0.1, 0.1);
     private readonly dots: Array<Container> = [];
-    // private readonly pacman: Sprite = new Sprite();
-    // private pacman: AnimatedSprite = {} as AnimatedSprite;// = new AnimatedSprite([]);
-    private pacman: Sprite = new Sprite();// = new AnimatedSprite([]);
+    private pacman: AnimatedSprite = {} as AnimatedSprite;// = new AnimatedSprite([]);
     private scoresCounter: number = 0;
     private dotRadius: number = 5;
     private scores: Text = new Text("");
@@ -145,14 +144,11 @@ export default class GameScene extends BaseScene {
         const title = new Text("Game Title", style);
         const scores = new Text(`Scores: ${scoresCounter}`, style);
         const frame = new Graphics().lineStyle(2, 0x00FF00, 0.4).drawRect(2, 2, 800 - 4, 600 - 4);
-        const pacmanTexture1 = StrictResourcesHelper.getTexture("PACMAN", "pack1.png");
-        const pacmanTexture2 = StrictResourcesHelper.getTexture("PACMAN", "pack2.png");
-        this.pacman = new AnimatedSprite([
-            pacmanTexture1,
-            pacmanTexture2,
-        ], true);
+        const animations:Texture[] = <Texture[]>Loader.shared.resources["PACMAN"]?.spritesheet?.animations.pack;
+                this.pacman = new AnimatedSprite(animations, true);
+        this.pacman.animationSpeed = 0.05;
+        this.pacman.play();
         const pacman = this.pacman;
-        this.pacman.texture = pacmanTexture1;
         pacman.anchor.x = 0.5;
         pacman.anchor.y = 0.5;
         pacman.scale.set(0.125);
@@ -179,9 +175,6 @@ export default class GameScene extends BaseScene {
                 this.dots.push(dot);
             }
         }
-        setInterval(() => {
-            pacman.texture = pacman.texture === pacmanTexture2 ? pacmanTexture1 : pacmanTexture2;
-        }, 300);
         this.spawnTimeoutId = setInterval(this.addNewDot.bind(this), 1000);
         this.scene.name = "game";
         this.layoutManager.addLayout(this.layouts);
@@ -239,7 +232,7 @@ export default class GameScene extends BaseScene {
                 this.dots.splice(this.dots.indexOf(dot), 1);
                 let vector = new Vector(this.pacman.position.x, this.pacman.position.y).sub(new Vector(dot.position.x, dot.position.y));
                 this.vector.add(vector.normalize().mult(0.5));
-                this.speedFactor += 0.25;
+                this.speedFactor += 0.125;
                 gsap.killTweensOf(this);
                 gsap.to(this, {
                     duration: 3,

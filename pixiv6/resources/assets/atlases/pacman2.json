@@ -1,0 +1,31 @@
+{"frames": {
+
+"pack1.png":
+{
+	"frame": {"x":1,"y":1,"w":369,"h":369},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":369,"h":369},
+	"sourceSize": {"w":369,"h":369}
+},
+"pack2.png":
+{
+	"frame": {"x":372,"y":1,"w":349,"h":369},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":349,"h":369},
+	"sourceSize": {"w":349,"h":369}
+}},
+"animations": {
+	"pack": ["pack1.png","pack2.png"]
+},
+"meta": {
+	"app": "https://www.codeandweb.com/texturepacker",
+	"version": "1.0",
+	"image": "pacman2.png",
+	"format": "RGBA8888",
+	"size": {"w":722,"h":371},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:18bca9a7cabbb306e55d2dd052726816:210fd6925d0f7bd4ea20810988a328b9:4c4edcf373583c6089e72a3d2139d812$"
+}
+}
