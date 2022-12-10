@@ -13,6 +13,7 @@ import LayoutManager, {PartialLayout} from "app/layoutManager/LayoutManager";
 import gsap from "gsap";
 import {Loader} from "@pixi/loaders";
 import {Texture} from "@pixi/core";
+import pgsap from "app/helpers/promise/gsap/PromisableGsap";
 
 export default class GameScene extends BaseScene {
     private readonly layouts: PartialLayout = {
@@ -144,8 +145,8 @@ export default class GameScene extends BaseScene {
         const title = new Text("Game Title", style);
         const scores = new Text(`Scores: ${scoresCounter}`, style);
         const frame = new Graphics().lineStyle(2, 0x00FF00, 0.4).drawRect(2, 2, 800 - 4, 600 - 4);
-        const animations:Texture[] = <Texture[]>Loader.shared.resources["PACMAN"]?.spritesheet?.animations.pack;
-                this.pacman = new AnimatedSprite(animations, true);
+        const animations: Texture[] = <Texture[]>Loader.shared.resources["PACMAN"]?.spritesheet?.animations.pack;
+        this.pacman = new AnimatedSprite(animations, true);
         this.pacman.animationSpeed = 0.05;
         this.pacman.play();
         const pacman = this.pacman;
@@ -181,11 +182,14 @@ export default class GameScene extends BaseScene {
     }
 
     createDot(position: {x: number, y: number}, color: number = 0xffff00) {
-        const dot = new Graphics().beginFill(color).drawCircle(
-            0,
-            0,
-            this.dotRadius
-        );
+        const dot = new Graphics()
+            .lineStyle(1, 0x555555, 0.8)
+            .beginFill(color)
+            .drawCircle(
+                0,
+                0,
+                this.dotRadius
+            );
         dot.position.set(position.x, position.y);
         return dot;
     };
@@ -224,11 +228,9 @@ export default class GameScene extends BaseScene {
     }
 
     protected checkMath(): void {
-        this.dots.slice().forEach(dot => {
+        this.dots.slice().forEach(async dot => {
             const dist = distance(this.pacman.position, dot.position);
             if (dist < this.pacman.width * .5 + this.dotRadius) {
-                this.scene.removeChild(dot);
-                this.scoresCounter++;
                 this.dots.splice(this.dots.indexOf(dot), 1);
                 let vector = new Vector(this.pacman.position.x, this.pacman.position.y).sub(new Vector(dot.position.x, dot.position.y));
                 this.vector.add(vector.normalize().mult(0.5));
@@ -242,8 +244,28 @@ export default class GameScene extends BaseScene {
                 this.updateScores();
                 clearInterval(this.spawnTimeoutId);
                 this.spawnTimeoutId = setInterval(this.addNewDot.bind(this), 1000);
+                await this.moveTo(dot, this.scores);
+                this.scene.removeChild(dot);
+                this.scoresCounter++;
             }
         });
+    }
+
+    protected async moveTo(dot: Container, to: Container) {
+        const duration = 1.75+Math.random()*0.5;
+        const ease = `back.inOut(${Math.random()*.5+1})`;
+        return Promise.all([
+            pgsap.to(dot, {
+                duration,
+                x: to.x,
+                ease,
+            }),
+            pgsap.to(dot, {
+                duration,
+                y: to.y,
+                ease,
+            }),
+        ]);
     }
 
     protected updatePositions(dt: number): void {
