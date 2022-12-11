@@ -2,24 +2,34 @@ import BaseScene from "app/scenes/BaseScene";
 import TextButtonControl from "app/controls/button/TextButtonControl";
 import ChoiceScene from "app/scenes/ChoiceScene";
 import { distance, Vector } from "app/helpers/math";
-import { Container } from "@pixi/display";
+import { Container, DisplayObject } from "@pixi/display";
 import { Sprite } from "@pixi/sprite";
 import { Text } from "@pixi/text";
 import gameModel, { TOrientation } from "app/model/GameModel";
 import { Graphics } from "@pixi/graphics";
+import { Ticker } from "@pixi/ticker";
 import StrictResourcesHelper from "app/pixi/StrictResourcesHelper";
 import { AnimatedSprite } from "@pixi/sprite-animated";
 
 export default class GPacmanScene extends BaseScene {
     private readonly vector: Vector = new Vector(0.1, 0.1);
     private readonly dots: Array<Container> = [];
+    private readonly enemyArray: Array<Container> = [];
     // private readonly pacman: Sprite = new Sprite();
     // private pacman: AnimatedSprite = {} as AnimatedSprite;// = new AnimatedSprite([]);
     private pacman: Sprite = new Sprite();// = new AnimatedSprite([]);
+    private enemyBoss: Sprite = new Sprite();
+    private bground: Sprite = new Sprite();
     private scoresCounter: number = 0;
     private dotRadius: number = 15;
     private scores: Text = new Text("");
     private speedFactor = 3;
+    private diraction: string = "right";
+    private isGameStart: boolean = false;
+    private mainContainer = new Container();
+    private gameContainer = new Container();
+    private finishContainer = new Container();
+
 
     compose(): void {
         const textButtonControl = new TextButtonControl("Back");
@@ -97,6 +107,16 @@ export default class GPacmanScene extends BaseScene {
             dot.position.set(position.x, position.y);
             return dot;
         };
+
+        const createEnemy = (position: { x: number, y: number }) => {
+            const enemyTexture = StrictResourcesHelper.getTexture("GPACMANICONS", "blinky.png");
+            const enemy = new Sprite(enemyTexture);
+            enemy.anchor.x = 0.5;
+            enemy.anchor.y = 0.5;
+            enemy.scale.set(0.17);
+            enemy.position.set(position.x, position.y);
+            return enemy;
+        };
         // createPixiApplication();
         //loader stuff:
         /*loader.add('BG', 'images/game_bg.png');
@@ -123,11 +143,15 @@ export default class GPacmanScene extends BaseScene {
         };
         const title = new Text("Game Title", style);
         const introText = new Text("Welcome to the game", style);
+        const titleStart = new Text("Click enter to start game!", style)
+        const titleEnd = new Text("Game Over", style);
         const scores = new Text(`Scores: ${scoresCounter}`, style);
         const frame = new Graphics().lineStyle(2, 0x00FF00, 0.4).drawRect(2, 2, 800 - 4, 600 - 4);
         // const bgTexture = StrictResourcesHelper.getTexture("UI", "bg");
         const pacmanTexture1 = StrictResourcesHelper.getTexture("PACMAN", "pack1.png");
         const pacmanTexture2 = StrictResourcesHelper.getTexture("PACMAN", "pack2.png");
+        const bgTexture = StrictResourcesHelper.getTexture("GPACMANICONS", "game_bg.png");
+        const enemyBossTexture = StrictResourcesHelper.getTexture("GPACMANICONS", "enemyBoss.png");
         this.pacman = new AnimatedSprite([
             pacmanTexture1,
             pacmanTexture2,
@@ -136,11 +160,13 @@ export default class GPacmanScene extends BaseScene {
         // const pacman = new Sprite(pacmanTexture1);
         const pacman = this.pacman;
         this.pacman.texture = pacmanTexture1;
+        // this.enemyBoss.texture = enemyBossTexture;
         // this.pacman.animationSpeed = 1;
         /*        pacman.textures = [
                     pacmanTexture1, pacmanTexture2
                 ];*/
         const dots = [];
+        const enemy = [];
         pacman.anchor.x = 0.5;
         pacman.anchor.y = 0.5;
         pacman.scale.set(0.125);
@@ -163,30 +189,117 @@ export default class GPacmanScene extends BaseScene {
             800 - 4,
             0
         );
+        titleStart.anchor.x = 0.5;
+        titleEnd.anchor.x = 0.5;
+        title.position.set(
+            800 / 2,
+            0
+        );
+        titleEnd.position.set(
+            800 / 2,
+            600 / 2
+        );
+        titleStart.position.set(
+            800 / 2,
+            600 / 2
+        );
+        this.bground.texture = bgTexture;
         // app.stage.addChild(mainContainer, finishContainer, gameContainer);
         // mainContainer.addChild(spriteBG, introText);
         // await delay(1);
         // introText.parent.removeChild(introText);
-        this.scene.addChild(title, scores, frame, pacman, emptySprite);
+
+        this.gameContainer.addChild(titleStart);
+        this.scene.addChild(this.gameContainer);
+        //this.scene.addChild(title, scores, frame, pacman, emptySprite);
         // emptySprite.texture = bgTexture;
         // emptySprite.width = 100;
         // emptySprite.height = 100;
-        const offsets = 60;
-        const padding = 30;
-        for (let i = 0; i < 13; i++) {
-            for (let j = 0; j < 10; j++) {
-                let dot = createDot({x: i * offsets + padding, y: j * offsets + padding});
-                this.scene.addChild(dot);
-                dots.push(dot);
-            }
-        }
+        // const offsets = 60;
+        // const padding = 30;
+        // for (let i = 0; i < 13; i++) {
+        //     for (let j = 0; j < 10; j++) {
+        //         let dot = createDot({x: i * offsets + padding, y: j * offsets + padding});
+        //         this.scene.addChild(dot);
+        //         dots.push(dot);
+        //     }
+        // }
         //pacman animation setup:
         setInterval(() => {
             pacman.texture = pacman.texture === pacmanTexture2 ? pacmanTexture1 : pacmanTexture2;
         }, 300);
         //game play setup:
 
+        if (!this.isGameStart) {
+            window.document.onkeydown = (e) => {
+                if (e.key === 'Enter') {
+                    const enemyBoss = this.enemyBoss;
+                    enemyBoss.anchor.x = 0.5;
+                    enemyBoss.anchor.y = 0.5;
+                    enemyBoss.scale.set(0.125);
+                    enemyBoss.position.set(400 / 2, 300 / 2);
 
+                    scoresCounter = 0;
+                    pacman.anchor.x = 0.5;
+                    pacman.anchor.y = 0.5;
+                    pacman.scale.set(0.125);
+                    pacman.position.set(800 / 2, 600 / 2);
+                    scores.text = `Scores: ${scoresCounter}`;
+                    this.isGameStart = true;
+                    this.mainContainer.addChild(this.bground, title, scores, pacman, enemyBoss);
+                    this.scene.removeChild(this.gameContainer);
+                    this.scene.addChild(this.mainContainer);
+                    const offsets = 60;
+                    for (let i = 0; i < 13; i++) {
+                        for (let j = 0; j < 10; j++) {
+                            let dot = createDot({ x: i * offsets, y: j * offsets });
+                            this.mainContainer.addChild(dot);
+                            dots.push(dot);
+                        }
+                    }
+
+                    for (let n = 0; n < 4; n++) {
+                        let enemy;
+                        let dist;
+                        do {
+                            enemy = createEnemy({ x: Math.random() * (600 - n * 50) + (n * 20), y: Math.random() * (600 - n * 50) + (n * 20) });
+                            dist = distance(pacman.position, enemy.position);
+                        } while ((dist < pacman.width * 0.5 + 5));
+                        this.mainContainer.addChild(enemy);
+                        this.enemyArray.push(enemy);
+                        enemy.scale.x *= -1;
+                        animationEnemyWalk(enemy);
+                    }
+                    if (this.isGameStart) {
+                        window.document.addEventListener('keydown', pacmanControl);
+                    }
+                    // this.scene.addChild(mainContainer);
+                    // const offsets = 60;
+                    // for (let i = 0; i < 13; i++) {
+                    //     for (let j = 0; j < 10; j++) {
+                    //         let dot = createDot({ x: i * offsets, y: j * offsets });
+                    //         mainContainer.addControl(dot);
+                    //         dots.push(dot);
+                    //     }
+                    // }
+                    // for (let n = 0; n < 4; n++) {
+                    //     let enemy;
+                    //     let dist;
+                    //     do {
+                    //         enemy = createEnemy({ x: Math.random() * (600 - n * 50) + (n * 20), y: Math.random() * (600 - n * 50) + (n * 20) });
+                    //         dist = distance(pacman.position, enemy.position);
+                    //     } while ((dist < pacman.width * 0.5 + 5));
+                    //     mainContainer.addControl(enemy);
+                    //     enemyArray.push(enemy);
+                    //     enemy.scale.x *= -1;
+                    //     animationEnemyWalk(enemy);
+                    // }
+                    // if (isGameStart) {
+                    //     window.document.addEventListener('keydown', pacmanControl);
+                    // }
+                }
+            };//end
+        }
         // const ticker = new PIXI.Ticker();
         // ticker.add(() => {
         //     updatePositions();
@@ -207,6 +320,13 @@ export default class GPacmanScene extends BaseScene {
         // this.pacman.update(delta);
         this.checkMath();
         this.updatePositions();
+    }
+    protected  animationEnemyWalk(enemy: DisplayObject) {
+        const offset = 1;
+        new  Ticker.add(() => {
+            enemy.position.x += offset;
+            enemy.position.x = (800 + enemy.position.x) % 800;
+        });
     }
     protected checkMath():void  {
         this.dots.slice().forEach(dot => {
