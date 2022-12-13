@@ -5,7 +5,7 @@ import ChoiceScene from "app/scenes/ChoiceScene";
 import TextButtonControl from "app/controls/button/TextButtonControl";
 import { GameSize } from "app/model/GameModel";
 
-export default class OS_WinScene extends BaseScene {
+export default class WinScene extends BaseScene {
     private readonly background = new BackgroundControl(Resources.getSingleTexture("OS_WIN-BG"));
     private readonly backBtn = new TextButtonControl("Back");
     compose() {

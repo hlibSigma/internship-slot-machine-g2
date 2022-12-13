@@ -3,7 +3,7 @@ import { Ticker } from "@pixi/ticker";
 
 import MainControl from "app/controls/MainControl";
 
-export default class OS_ScoreControl extends MainControl {
+export default class ScoreControl extends MainControl {
     private readonly title = 'Score';
     private counter = 0;
     private readonly text: Text;

@@ -15,7 +15,7 @@ enum Key {
     D = "d",
 }
 
-export default class OS_PacmanControl extends MainControl {
+export default class PacmanControl extends MainControl {
     readonly sprite: AnimatedSprite;
     readonly moveSpeed = 4;
     private readonly vector = new Vector(0, 0);

@@ -4,20 +4,20 @@ import BaseScene from "app/scenes/BaseScene";
 import Resources from "app/pixi/StrictResourcesHelper";
 import BackgroundControl from "app/controls/BackgroundControl";
 
-import OS_PacmanControl from "app/controls/OS/OS_PacmanControl";
-import OS_DotControl from "app/controls/OS/OS_DotControl";
-import OS_ScoreControl from "app/controls/OS/OS_ScoreControl";
-import OS_GhostControl from "app/controls/OS/OS_GhostControl";
+import PacmanControl from "app/controls/OS/PacmanControl";
+import DotControl from "app/controls/OS/DotControl";
+import ScoreControl from "app/controls/OS/ScoreControl";
+import GhostControl from "app/controls/OS/GhostControl";
 import ChoiceScene from "app/scenes/ChoiceScene";
-import OS_WinScene from "app/scenes/OS_WinScene";
+import WinScene from "app/scenes/OS/WinScene";
 import { GameSize } from "app/model/GameModel";
 
-export default class OS_GameScene extends BaseScene {
+export default class GameScene extends BaseScene {
     private readonly background = new BackgroundControl(Resources.getSingleTexture("OS_GAME-BG"));
-    private readonly pacman = new OS_PacmanControl();
-    private readonly dots: OS_DotControl[] = [];
-    private readonly score = new OS_ScoreControl();
-    private readonly ghost = new OS_GhostControl(this.pacman);
+    private readonly pacman = new PacmanControl();
+    private readonly dots: DotControl[] = [];
+    private readonly score = new ScoreControl();
+    private readonly ghost = new GhostControl(this.pacman);
     private readonly padding = 100;
 
     compose() {
@@ -51,7 +51,7 @@ export default class OS_GameScene extends BaseScene {
     }
 
     private win() {
-        this.sceneManager.navigate(OS_WinScene);
+        this.sceneManager.navigate(WinScene);
     }
 
     private lose() {
@@ -66,7 +66,7 @@ export default class OS_GameScene extends BaseScene {
 
         for (let x = this.padding; x < maxPos.x; x += this.padding) {
             for (let y = this.padding; y < maxPos.y; y += this.padding) {
-                const dot = new OS_DotControl(new Point(x, y));
+                const dot = new DotControl(new Point(x, y));
 
                 this.dots.push(dot);
                 this.addControl(dot);

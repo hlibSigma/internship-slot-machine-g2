@@ -5,7 +5,7 @@ import { Sprite } from "@pixi/sprite";
 import MainControl from "app/controls/MainControl";
 import { distance } from "app/helpers/math";
 
-export default class OS_DotControl extends MainControl {
+export default class DotControl extends MainControl {
     private readonly size = 10;
     private readonly color = 0xe9b8af;
     private readonly graphics: Graphics;

@@ -3,15 +3,15 @@ import { AnimatedSprite } from "@pixi/sprite-animated";
 
 import MainControl from "app/controls/MainControl";
 import Resources from "app/pixi/StrictResourcesHelper";
-import OS_PacmanControl from "app/controls/OS/OS_PacmanControl";
+import PacmanControl from "app/controls/OS/PacmanControl";
 import { lerp, distance } from "app/helpers/math";
 
-export default class OS_GhostControl extends MainControl {
+export default class GhostControl extends MainControl {
     readonly sprite: AnimatedSprite;
     private readonly moveSpeed: number;
     private readonly target: Sprite;
 
-    constructor(pacman: OS_PacmanControl) {
+    constructor(pacman: PacmanControl) {
         super();
 
         const textures = Resources.getAnimation(

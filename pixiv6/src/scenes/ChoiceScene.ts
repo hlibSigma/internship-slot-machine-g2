@@ -20,7 +20,7 @@ import {PivotType} from "app/controls/MainControl";
 import choiceSceneLayout from "app/scenes/ChoiceScene.layout";
 import SpineControlScene from "app/scenes/SpineControlScene";
 import GameScene from "app/scenes/GameScene";
-import OS_GameScene from "app/scenes/OS_GameScene";
+import OS_GameScene from "app/scenes/OS/GameScene";
 
 export default class ChoiceScene extends BaseScene {
     @inject(FullScreenButtonControl, ChoiceScene.createFullScreenButton)
