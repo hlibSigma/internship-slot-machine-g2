@@ -351,7 +351,6 @@ export default class GameScene extends BaseScene {
 
         pacman.rotation = vector.angle();
         pacman.scale.y = (vector.x < 0 ? -1 : 1) * 0.125
-        console.log(vector.angle());
     }
 
     private updateScores() {
