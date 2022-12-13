@@ -33,8 +33,7 @@ export default class LoaderScene extends BaseScene {
         this.scene.addChild(this.simpleLoaderContainer);
         new AlphaFadeInEffect(this.simpleLoaderContainer, this.app.ticker);
 
-        Loader.shared.add('OS_PACMAN', 'assets/atlases/OS_pacman.json');
-        Loader.shared.add('OS_GHOST', 'assets/atlases/OS_ghost.json');
+        Loader.shared.add('OS_ATLAS', 'assets/atlases/OS_atlas.json');
         Loader.shared.add('OS_GAME-BG', 'assets/images/OS_game-bg.jpg');
         Loader.shared.add('OS_WIN-BG', 'assets/images/OS_win-bg.png');
         Loader.shared.add({name: "PressStart2P", url: "./assets/fonts/PressStart2P-Regular.ttf"});

@@ -24,8 +24,8 @@ export default class PacmanControl extends MainControl {
         super();
 
         const textures = Resources.getAnimation(
-            "OS_PACMAN",
-            "IDLE"
+            "OS_ATLAS",
+            "pacman"
         );
 
         this.sprite = new AnimatedSprite(textures);

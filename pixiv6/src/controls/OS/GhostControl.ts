@@ -15,8 +15,8 @@ export default class GhostControl extends MainControl {
         super();
 
         const textures = Resources.getAnimation(
-            "OS_GHOST",
-            "IDLE"
+            "OS_ATLAS",
+            "ghost"
         );
 
         this.sprite = new AnimatedSprite(textures);
