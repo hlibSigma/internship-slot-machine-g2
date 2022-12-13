@@ -16,6 +16,7 @@ import {Texture} from "@pixi/core";
 import pgsap from "app/helpers/promise/gsap/PromisableGsap";
 import {PivotType} from "app/controls/MainControl";
 import {Point} from "@pixi/math";
+import {promiseDelay} from "app/helpers/TimeHelper";
 
 export default class GameScene extends BaseScene {
     private readonly commonLayouts: PartialLayout[] = [{
@@ -297,6 +298,11 @@ export default class GameScene extends BaseScene {
                 await this.moveTo(dot, this.scores, offsets);
                 this.mainContainer.removeChild(dot);
                 this.scoresCounter++;
+                if (this.dots.length == 0) {
+                    gameModel.getHowler().play("success");
+                    await promiseDelay(1.5);
+                    this.sceneManager.navigate(ChoiceScene);
+                }
             }
         });
     }
