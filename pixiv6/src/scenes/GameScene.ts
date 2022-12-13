@@ -293,15 +293,19 @@ export default class GameScene extends BaseScene {
                 clearInterval(this.spawnTimeoutId);
                 this.spawnTimeoutId = setInterval(this.addNewDot.bind(this), 1000);
                 gameModel.getHowler().play("pop" + (Math.round(Math.random() * 4) + 1))
-                await this.moveTo(dot, this.scores);
+                let offsets = {offsetX: -(this.scores.width - 30), offsetY: -this.scores.height * .5};
+                await this.moveTo(dot, this.scores, offsets);
                 this.mainContainer.removeChild(dot);
                 this.scoresCounter++;
             }
         });
     }
 
-    protected async moveTo(dot: Container, to: Container) {
-        let localPosition = this.getLocalPosition(to);
+    protected async moveTo(dot: Container, to: Container, offsets?: {offsetX?: number, offsetY?: number}) {
+        offsets = offsets ?? {offsetX: 0, offsetY: 0};
+        offsets.offsetX = offsets.offsetX ?? 0;
+        offsets.offsetY = offsets.offsetY ?? 0;
+        let localPosition = this.getLocalPosition(to, offsets.offsetX, offsets.offsetY);
         const duration = 1.75 + Math.random() * 0.5;
         const ease = `back.inOut(${Math.random() * .5 + 1})`;
         return Promise.all([
