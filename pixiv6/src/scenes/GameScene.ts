@@ -114,7 +114,7 @@ export default class GameScene extends BaseScene {
     private dotRadius: number = 5;
     private scores: Text = new Text("");
     private readonly originSpeedFactor = 3;
-    private speedFactor = 3;
+    private speedFactor = this.originSpeedFactor;
     private mainContainer: Container = new Container();
     @inject(LayoutManager)
     private layoutManager: LayoutManager = <any>{};
