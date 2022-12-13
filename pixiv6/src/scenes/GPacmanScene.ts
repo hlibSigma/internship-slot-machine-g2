@@ -246,6 +246,7 @@ export default class GPacmanScene extends BaseScene {
         if (!this.isGameStart) {
             window.document.onkeydown = (e) => {
                 if (e.key === 'Enter') {
+                    this.scene.removeChild(this.finishContainer);
                     this.dots = [];
                     this.enemyArray = [];
                     this.scoresCounter = 0;
@@ -497,6 +498,7 @@ export default class GPacmanScene extends BaseScene {
             600 / 2
         );
         titleEnd.anchor.x = 0.5;
+        this.finishContainer.removeChild(titleEnd);
         titleEnd.text = `Game over! You ${resultText}!Click Enter to retry.`;
         this.scene.removeChild(this.mainContainer);
         this.finishContainer.addChild(titleEnd);
