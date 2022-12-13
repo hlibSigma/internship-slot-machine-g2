@@ -40,7 +40,12 @@ export class Vector {
 
     normalize() {
         const m = this.mag();
-        this.div(m);
+        if(m == 0){
+            this.x = 1;
+            this.y = 0;
+        } else {
+            this.div(m);
+        }
         return this;
     };
 
@@ -50,3 +55,6 @@ export function distance(p1:{x:number, y:number}, p2:{x:number, y:number}):numbe
     return Math.sqrt((p1.x - p2.x) ** 2 + (p1.y - p2.y) ** 2);
 }
 
+export function lerp(value1: number, value2: number, amount: number) {
+    return (1 - amount) * value1 + amount * value2;
+}
