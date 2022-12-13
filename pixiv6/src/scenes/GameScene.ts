@@ -2,10 +2,10 @@ import BaseScene from "app/scenes/BaseScene";
 import TextButtonControl from "app/controls/button/TextButtonControl";
 import ChoiceScene from "app/scenes/ChoiceScene";
 import {distance, Vector} from "app/helpers/math";
-import {Container} from "@pixi/display";
+import {Container, DisplayObject} from "@pixi/display";
 import {Sprite} from "@pixi/sprite";
 import {Graphics} from "@pixi/graphics";
-import {Text} from "@pixi/text";
+import {ITextStyle, Text} from "@pixi/text";
 import {AnimatedSprite} from "@pixi/sprite-animated";
 import gameModel, {GameSize, TOrientation} from "app/model/GameModel";
 import {inject} from "app/model/injection/InjectDecorator";
@@ -14,8 +14,19 @@ import gsap from "gsap";
 import {Loader} from "@pixi/loaders";
 import {Texture} from "@pixi/core";
 import pgsap from "app/helpers/promise/gsap/PromisableGsap";
+import {PivotType} from "app/controls/MainControl";
+import {Point} from "@pixi/math";
 
 export default class GameScene extends BaseScene {
+    private readonly commonLayouts: PartialLayout[] = [{
+        name: "box",
+        uid: "box",
+        scaleBy: "fit.in",
+        height: "98%",
+        width: "98%",
+        top: "1%",
+        left: "1%",
+    }];
     private readonly layouts: PartialLayout = {
         name: "body",
         display: "relative",
@@ -28,6 +39,45 @@ export default class GameScene extends BaseScene {
             name: "gameBar",
             height: 100,
             width: "100%",
+            display: "relative",
+            layouts: [
+                {
+                    name: "leftBox",
+                    extend: "box",
+                    align: "l",
+                    alignIn: "l",
+                    width: 100,
+                    layouts: [{
+                        name: "backBtn",
+                        extend: "box",
+                        width: 100,
+                    }]
+                },
+                {
+                    name: "centerBox",
+                    extend: "box",
+                    align: "c",
+                    alignIn: "c",
+                    width: "80%",
+                    layouts: [{
+                        name: "title",
+                        extend: "box",
+                        width: 300,
+                        align: "c",
+                    }]
+                },
+                {
+                    name: "rightBox",
+                    extend: "box",
+                    align: "r",
+                    alignIn: "r",
+                    layouts: [{
+                        name: "scores",
+                        extend: "box",
+                        width: 300,
+                    }],
+                }
+            ]
         }, {
             name: "gameBody",
             width: "100%",
@@ -71,9 +121,9 @@ export default class GameScene extends BaseScene {
     private orientations: TOrientation[] = [];
 
     compose(): void {
-        const textButtonControl = new TextButtonControl("Back");
+        const textButtonControl = new TextButtonControl("Back", {align: PivotType.TL})
+            .name("backBtn");
         this.addControl(textButtonControl);
-        textButtonControl.container.position.set(100, 100);
         textButtonControl.onClick.add(this.onBackBtnClick, this);
         const keyPressMap = new Map<string, TOrientation>();
         keyPressMap.set("A", "left");
@@ -131,7 +181,7 @@ export default class GameScene extends BaseScene {
         let scoresCounter = 0;
         const emptySprite = new Sprite();
 
-        let style = {
+        let style: Partial<ITextStyle> = {
             fill: [
                 "#53b512",
                 "#c70000"
@@ -140,9 +190,10 @@ export default class GameScene extends BaseScene {
                 0.2
             ],
             stroke: "white",
-            strokeThickness: 1
+            strokeThickness: 1,
+            fontSize: 100
         };
-        const title = new Text("Game Title", style);
+        const title = new Text("PACMAN", style);
         const scores = new Text(`Scores: ${scoresCounter}`, style);
         const frame = new Graphics().lineStyle(2, 0x00FF00, 0.4).drawRect(2, 2, 800 - 4, 600 - 4);
         const animations: Texture[] = <Texture[]>Loader.shared.resources["PACMAN"]?.spritesheet?.animations.pack;
@@ -154,30 +205,23 @@ export default class GameScene extends BaseScene {
         pacman.anchor.y = 0.5;
         pacman.scale.set(0.125);
         pacman.position.set(800 / 2, 600 / 2);
-        title.anchor.x = 0.5;
-        title.position.set(
-            800 / 2,
-            0
-        );
-        scores.anchor.x = 1;
-        scores.position.set(
-            800 - 4,
-            0
-        );
+        title.name = "title";
+        scores.name = "scores";
         this.scores = scores;
-        this.scene.addChild(this.mainContainer);
-        this.scene.addChild(title, scores, frame, pacman, emptySprite);
+        this.scene.addChild(this.mainContainer, title, scores);
+        this.mainContainer.addChild(frame, pacman, emptySprite);
         const offsets = 60;
         const padding = 30;
         for (let i = 0; i < 13; i++) {
             for (let j = 0; j < 10; j++) {
                 let dot = this.createDot({x: i * offsets + padding, y: j * offsets + padding});
-                this.scene.addChild(dot);
+                this.mainContainer.addChildAt(dot, 0);
                 this.dots.push(dot);
             }
         }
         this.spawnTimeoutId = setInterval(this.addNewDot.bind(this), 1000);
-        this.scene.name = "game";
+        this.mainContainer.name = "game";
+        this.layoutManager.addLayout(...this.commonLayouts);
         this.layoutManager.addLayout(this.layouts);
     }
 
@@ -199,7 +243,7 @@ export default class GameScene extends BaseScene {
             return;
         }
         let dot = this.createDot(this.pacman.position, 0xff0000);
-        this.scene.addChildAt(dot, 0);
+        this.mainContainer.addChildAt(dot, 0);
         this.scoresCounter--;
         setTimeout(() => {
             this.dots.push(dot);
@@ -217,6 +261,7 @@ export default class GameScene extends BaseScene {
     }
 
     protected onUpdate(delta: number) {
+        delta = Math.min(delta, 1);
         super.onUpdate(delta);
         this.checkMath();
         this.updatePositions(delta);
@@ -245,27 +290,50 @@ export default class GameScene extends BaseScene {
                 clearInterval(this.spawnTimeoutId);
                 this.spawnTimeoutId = setInterval(this.addNewDot.bind(this), 1000);
                 await this.moveTo(dot, this.scores);
-                this.scene.removeChild(dot);
+                this.mainContainer.removeChild(dot);
                 this.scoresCounter++;
             }
         });
     }
 
     protected async moveTo(dot: Container, to: Container) {
-        const duration = 1.75+Math.random()*0.5;
-        const ease = `back.inOut(${Math.random()*.5+1})`;
+        let localPosition = this.getLocalPosition(to);
+        const duration = 1.75 + Math.random() * 0.5;
+        const ease = `back.inOut(${Math.random() * .5 + 1})`;
         return Promise.all([
             pgsap.to(dot, {
                 duration,
-                x: to.x,
+                x: localPosition.x,
                 ease,
             }),
             pgsap.to(dot, {
                 duration,
-                y: to.y,
+                y: localPosition.y,
                 ease,
             }),
         ]);
+    }
+
+    protected getLocalPosition(displayObject: DisplayObject, offsetX: number = 0, offsetY: number = 0, where?: Container): Point {
+        let result;
+        if (offsetX != 0 || offsetY != 0) {
+            const oldX: number = displayObject.x;
+            const oldY: number = displayObject.y;
+            displayObject.x -= offsetX;
+            displayObject.y -= offsetY;
+            result = displayObject.getGlobalPosition();
+            displayObject.x = oldX;
+            displayObject.y = oldY;
+        } else {
+            result = displayObject.getGlobalPosition();
+        }
+
+        result.set(
+            result.x / this.mainContainer.parent.scale.x,
+            result.y / this.mainContainer.parent.scale.y
+        );
+        where = where ? where : this.mainContainer;
+        return where.toLocal(result);
     }
 
     protected updatePositions(dt: number): void {
