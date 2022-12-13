@@ -14,5 +14,31 @@ export default class StrictResourcesHelper {
         }
         return texture;
     }
+
+    static getSingleTexture(textureId: string): Texture {
+        const texture = Loader.shared.resources[textureId].texture;
+
+        if (!texture) {
+            throw `${texture} texture is not defined!`;
+        }
+
+        return texture;
+    }
+
+    static getAnimation(spritesheetId: string, animationId: string): Texture[] {
+        const spritesheet = Loader.shared.resources[spritesheetId].spritesheet;
+
+        if (!spritesheet) {
+            throw `${spritesheetId} spritesheet is not defined!`;
+        }
+
+        const animation = spritesheet.animations[animationId];
+
+        if (!animation) {
+            throw `${animationId} animation is not defined in ${spritesheetId} spritesheet!`;
+        }
+
+        return animation;
+    }
     
 }
