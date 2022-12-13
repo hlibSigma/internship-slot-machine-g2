@@ -8,6 +8,7 @@ import DevPixiDrawLayoutPlugin from "app/layoutManager/DevPixiDrawLayoutPlugin";
 import dependencyManager from "app/model/injection/InjectDecorator";
 import LayoutManager from "app/layoutManager/LayoutManager";
 import DevToolUtils from "app/dev/DevToolUtils";
+import sounds from "res/sounds/SOUND_FILE.soundmap.json";
 
 export default class DevController {
     private stats: Stats = new Stats();
@@ -101,6 +102,7 @@ export default class DevController {
 
     private setupSounds(gui: GUI) {
         let howler = gameModel.getHowler();
+        let soundIdItems = Object.getOwnPropertyNames(sounds.sprite);
         let id: number;
         let target = {
             rate: 1,
@@ -120,7 +122,7 @@ export default class DevController {
                 howler.volume(data);
             },
             soundId: "success",
-            _soundIdItems: ["success", "relax_loop"],
+            _soundIdItems: soundIdItems,
             play: () => {
                 id = howler.play(target.soundId);
             },

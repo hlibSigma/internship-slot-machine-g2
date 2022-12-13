@@ -5,7 +5,7 @@ import {Ticker} from "@pixi/ticker";
 import {inject} from "app/model/injection/InjectDecorator";
 
 export default class SpineControl extends MainControl {
-    private spine:Spine;
+    public readonly spine:Spine;
     @inject(Ticker)
     public ticker:Ticker = <any>{};
 

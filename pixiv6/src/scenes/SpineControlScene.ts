@@ -6,14 +6,15 @@ import TextButtonControl from "app/controls/button/TextButtonControl";
 import ChoiceScene from "app/scenes/ChoiceScene";
 import {inject} from "app/model/injection/InjectDecorator";
 import SpineControl from "app/controls/SpineControl";
+import HotKeyTool from "app/dev/HotKeyTool";
 
 export default class SpineControlScene extends BaseScene {
     @inject(FullScreenButtonControl)
-    private fullScreenButton:FullScreenButtonControl = <any>{};
+    private fullScreenButton: FullScreenButtonControl = <any>{};
     private textButtonControl = new TextButtonControl("Back");
-    private spineBoy:SpineControl = <any>{};
+    private spineBoy: SpineControl = <any>{};
 
-    compose():void {
+    compose(): void {
         this.spineBoy = this.getSpineBoy();
         this.textButtonControl.onClick.add(() => {
             gameModel.getHowler().play("btn_click");
@@ -21,18 +22,21 @@ export default class SpineControlScene extends BaseScene {
         }, this);
     }
 
-    activate():void {
+    activate(): void {
         super.activate();
-        let backgroundControl:BackgroundControl = gameModel.resolve(BackgroundControl);
+        let backgroundControl: BackgroundControl = gameModel.resolve(BackgroundControl);
         this.addControl(backgroundControl);
         this.addControl(this.fullScreenButton);
         this.addControl(this.textButtonControl);
         this.addControl(this.spineBoy);
-        this.spineBoy.play("idle", {loop:true});
+        this.spineBoy.play("idle", {loop: true, trackIndex: 1});
         this.spineBoy.setSkin("default");
+        HotKeyTool.instance.registerOnKey("C", () => {
+            this.spineBoy.play("shoot", {loop: true, trackIndex: 2});
+        });
     }
 
-    protected onResize(gameSize:GameSize) {
+    protected onResize(gameSize: GameSize) {
         super.onResize(gameSize);
         this.spineBoy.container.x = gameSize.width * .25;
         this.spineBoy.container.y = (gameSize.height + this.spineBoy.container.height) * .5;
@@ -53,7 +57,7 @@ export default class SpineControlScene extends BaseScene {
         super.dispose();
     }
 
-    private getSpineBoy():SpineControl {
+    private getSpineBoy(): SpineControl {
         const spineControl = new SpineControl("spineboy");
         return spineControl;
     }

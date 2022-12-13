@@ -40,7 +40,12 @@ export class Vector {
 
     normalize() {
         const m = this.mag();
-        this.div(m);
+        if(m == 0){
+            this.x = 1;
+            this.y = 0;
+        } else {
+            this.div(m);
+        }
         return this;
     };
 
