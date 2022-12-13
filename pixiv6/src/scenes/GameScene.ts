@@ -257,6 +257,7 @@ export default class GameScene extends BaseScene {
 
     deactivate() {
         this.layoutManager.removeLayout(this.layouts);
+        clearInterval(this.spawnTimeoutId);
         super.deactivate();
     }
 
