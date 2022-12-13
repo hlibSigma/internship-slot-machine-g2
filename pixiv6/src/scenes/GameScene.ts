@@ -242,6 +242,9 @@ export default class GameScene extends BaseScene {
         if (this.scoresCounter <= 0) {
             return;
         }
+        let howler = gameModel.getHowler();
+        let soundId = howler.play("water_step");
+        howler.volume(0.5, soundId);
         let dot = this.createDot(this.pacman.position, 0xff0000);
         this.mainContainer.addChildAt(dot, 0);
         this.scoresCounter--;
@@ -289,6 +292,7 @@ export default class GameScene extends BaseScene {
                 this.updateScores();
                 clearInterval(this.spawnTimeoutId);
                 this.spawnTimeoutId = setInterval(this.addNewDot.bind(this), 1000);
+                gameModel.getHowler().play("pop" + (Math.round(Math.random() * 4) + 1))
                 await this.moveTo(dot, this.scores);
                 this.mainContainer.removeChild(dot);
                 this.scoresCounter++;
