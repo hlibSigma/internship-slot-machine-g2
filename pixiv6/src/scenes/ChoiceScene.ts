@@ -21,6 +21,7 @@ import choiceSceneLayout from "app/scenes/ChoiceScene.layout";
 import SpineControlScene from "app/scenes/SpineControlScene";
 import GameScene from "app/scenes/GameScene";
 import GPacmanScene from "app/scenes/GPacmanScene";
+import OS_GameScene from "app/scenes/OS/GameScene";
 
 export default class ChoiceScene extends BaseScene {
     @inject(FullScreenButtonControl, ChoiceScene.createFullScreenButton)
@@ -41,9 +42,10 @@ export default class ChoiceScene extends BaseScene {
         new TextButtonControl("Frag Shader scene", {target: FragShaderAnimationScene, style: this.style, align:PivotType.TL}).name("item3_1"),
         new TextButtonControl("Font Scene", {target: FontScene, style: this.style, align:PivotType.TL}).name("item3_2"),
         new TextButtonControl("Layout Scene", {target: LayoutScene, style: this.style, align:PivotType.TL}).name("item4_1"),
-        new TextButtonControl("Dev animation scene", {target: DevAnimationScene, style: this.style, align:PivotType.TL}).name("item4_2"),
-        new TextButtonControl("Gsap dev animation scene", {target: GsapDevAnimationScene, style: this.style, align:PivotType.TL}).name("item5_1"),
-        new TextButtonControl("GPacman", {target: GPacmanScene, style: this.style, align:PivotType.TL}).name("item5_1"),
+        // new TextButtonControl("Dev animation scene", {target: DevAnimationScene, style: this.style, align:PivotType.TL}).name("item4_2"),
+        new TextButtonControl("GPacman", {target: GPacmanScene, style: this.style, align:PivotType.TL}).name("item4_2"),
+        // new TextButtonControl("Gsap dev animation scene", {target: GsapDevAnimationScene, style: this.style, align:PivotType.TL}).name("item5_1"),
+        new TextButtonControl("OS_Pacman", {target: OS_GameScene, style: this.style, align:PivotType.TL}).name("item5_1"),
         new TextButtonControl("MS_Pacman", {target: GsapDevAnimationScene, style: this.style, align:PivotType.TL}).name("item5_2"),
     ];
 
