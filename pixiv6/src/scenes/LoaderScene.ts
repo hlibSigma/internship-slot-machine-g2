@@ -1,14 +1,14 @@
 import BaseScene from "./BaseScene";
-import gameModel, {GameSize} from "../model/GameModel";
+import gameModel, { GameSize } from "../model/GameModel";
 import SceneManager from "./SceneManager";
 import AlphaFadeInEffect from "../pixi/effects/AlphaFadeInEffect";
 import GameTitle from "../controls/GameTitle";
 import HtmlBackgroundControl from "../controls/HtmlBackgroundControl";
 import SimpleLoaderControl from "../controls/SimpleLoaderControl";
 import ChoiceScene from "app/scenes/ChoiceScene";
-import {Container} from "@pixi/display";
-import {Application} from "@pixi/app";
-import {Loader} from "@pixi/loaders";
+import { Container } from "@pixi/display";
+import { Application } from "@pixi/app";
+import { Loader } from "@pixi/loaders";
 
 export default class LoaderScene extends BaseScene {
     private readonly gameTitle: Container;
@@ -37,7 +37,7 @@ export default class LoaderScene extends BaseScene {
         Loader.shared.add('OS_WIN-BG', 'assets/images/OS_win-bg.png');
         Loader.shared.add({name: "PressStart2P", url: "./assets/fonts/PressStart2P-Regular.ttf"});
         Loader.shared.add('UI', 'assets/atlases/ui.json');
-        Loader.shared.add('PACMAN', 'assets/atlases/pacman.json');
+        Loader.shared.add('PACMAN', 'assets/atlases/pacman2.json');
         Loader.shared.add('GPACMANICONS', 'assets/atlases/gPacmanIcons.json');
         // Loader.shared.add('windmill', 'assets/atlases/windmill.json');
         Loader.shared.add('spineboy', 'assets/atlases/spineboy.json');
