@@ -30,7 +30,7 @@ export default class ChoiceScene extends BaseScene {
     private layoutManager:LayoutManager = <any>{};
 
     private style:Partial<ITextStyle> = {
-        fontFamily: "Scalter-SerifCondensed",
+        fontFamily: "Arial",
         letterSpacing: 2,
         fontSize: 24
     };
