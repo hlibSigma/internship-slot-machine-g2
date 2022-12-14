@@ -25,6 +25,7 @@ export default class SpineControl extends MainControl {
         this.spine.state.setAnimation(
             data.trackIndex, name, data.loop
         );
+        this.ticker.remove(this.update, this);
         this.ticker.add(this.update, this);
     }
 
