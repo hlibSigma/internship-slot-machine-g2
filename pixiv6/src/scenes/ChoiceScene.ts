@@ -11,15 +11,16 @@ import TextButtonControl from "app/controls/button/TextButtonControl";
 import StrictResourcesHelper from "app/pixi/StrictResourcesHelper";
 import ButtonControl from "app/controls/button/ButtonControl";
 import FragShaderAnimationScene from "app/scenes/FragShaderAnimationScene";
-import {ITextStyle} from "@pixi/text";
+import { ITextStyle } from "@pixi/text";
 import FontScene from "app/scenes/FontScene";
-import {inject} from "app/model/injection/InjectDecorator";
+import { inject } from "app/model/injection/InjectDecorator";
 import LayoutScene from "app/scenes/LayoutScene";
 import LayoutManager from "app/layoutManager/LayoutManager";
-import {PivotType} from "app/controls/MainControl";
+import { PivotType } from "app/controls/MainControl";
 import choiceSceneLayout from "app/scenes/ChoiceScene.layout";
 import SpineControlScene from "app/scenes/SpineControlScene";
 import GameScene from "app/scenes/GameScene";
+import GPacmanScene from "app/scenes/GPacmanScene";
 import OS_GameScene from "app/scenes/OS/GameScene";
 import SymbolsScene from "app/scenes/SymbolsScene";
 
@@ -46,6 +47,7 @@ export default class ChoiceScene extends BaseScene {
         new TextButtonControl("Gsap animation scene", {target: GsapDevAnimationScene, style: this.style, align:PivotType.TL}).name("item4_3"),
         new TextButtonControl("OS_Pacman", {target: OS_GameScene, style: this.style, align:PivotType.TL}).name("item5_1"),
         new TextButtonControl("MS_Pacman", {target: GsapDevAnimationScene, style: this.style, align:PivotType.TL}).name("item5_2"),
+        new TextButtonControl("GPacman", {target: GPacmanScene, style: this.style,align: PivotType.TL}).name("item5_3"),
         new TextButtonControl("Spine symbols", {target: SymbolsScene, style: this.style, align:PivotType.TL}).name("item6_1"),
     ];
 
