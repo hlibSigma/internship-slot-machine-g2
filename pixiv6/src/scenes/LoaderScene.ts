@@ -39,6 +39,7 @@ export default class LoaderScene extends BaseScene {
         Loader.shared.add('UI', 'assets/atlases/ui.json');
         Loader.shared.add('PACMAN', 'assets/atlases/pacman2.json');
         Loader.shared.add('MC_GAME-BG', 'assets/images/bg.jpg');
+        Loader.shared.add('MC_WIN-BG', 'assets/images/win_bg.png');
         Loader.shared.add('MC_GHOST', 'assets/atlases/ghost.json');
         Loader.shared.add('GPACMANICONS', 'assets/atlases/gPacmanIcons.json');
         // Loader.shared.add('windmill', 'assets/atlases/windmill.json');

@@ -4,11 +4,13 @@ import BaseScene from "../BaseScene";
 import Resources from "app/pixi/StrictResourcesHelper";
 import ChoiceScene from "../ChoiceScene";
 import PacmanControl from "app/controls/MC/PacmanControl";
-import DotControl from "app/controls/MC/DotsControl";
-import { Point } from "pixi.js";
-import { getCollision } from "app/helpers/math";
+import DotControl from "app/controls/MC/DotControl";
+import { Point, Ticker } from "pixi.js";
+import { distance, getCollision, Vector } from "app/helpers/math";
 import ScoreControl from "app/controls/MC/ScoreControl";
 import GhostControl from "app/controls/MC/GhostControler";
+import gameModel from "app/model/GameModel";
+import WinScreen from "./WinScreen";
 
 export default class GameScene extends BaseScene {
     private readonly pacman = new PacmanControl();
@@ -45,7 +47,7 @@ export default class GameScene extends BaseScene {
     }
 
     private checkCollision() {
-        this.dots.forEach((dot) => {
+        this.dots.forEach(async (dot) => {
             if (
                 getCollision(
                     dot.position,
@@ -56,9 +58,36 @@ export default class GameScene extends BaseScene {
             ) {
                 this.score.increment();
                 this.dots.splice(this.dots.indexOf(dot), 1);
-                this.scene.removeChild(dot.container);
+                gameModel
+                    .getHowler()
+                    .play("pop" + (Math.round(Math.random() * 4) + 1));
+
+                this.moveDot(dot);
             }
         });
+    }
+
+    private moveDot(dot: DotControl) {
+        const ticker = new Ticker();
+        const vector = new Vector(
+            this.score.position.x - dot.position.x,
+            this.score.position.y - dot.position.y
+        );
+        vector.normalize();
+        const speed = 15;
+
+        ticker.add((delta: number) => {
+            dot.position.x += vector.x * speed * delta;
+            dot.position.y += vector.y * speed * delta;
+
+            if (distance(dot.position, this.score.position) < 10) {
+                console.log(dot.position);
+                this.scene.removeChild(dot.container);
+                ticker.destroy();
+            }
+        });
+
+        ticker.start();
     }
 
     private onBackClick() {
@@ -78,6 +107,12 @@ export default class GameScene extends BaseScene {
         }
     }
 
+    private checkWin() {
+        if (this.score.checkScoresCounter(5)) {
+            this.sceneManager.navigate(WinScreen);
+        }
+    }
+
     protected onUpdate(delta: number): void {
         super.onUpdate(delta);
         this.pacman.positionUpdate(delta);
@@ -85,5 +120,6 @@ export default class GameScene extends BaseScene {
         this.checkBorders();
         this.ghost.update(delta, this.pacman.sprite);
         this.checkCollisionGhost();
+        this.checkWin();
     }
 }

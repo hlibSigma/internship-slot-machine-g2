@@ -7,6 +7,7 @@ export default class ScoreControl extends MainControl {
     private readonly title = "Score";
     private counter = 0;
     private readonly text: Text;
+    readonly position: { x: number; y: number };
 
     constructor() {
         super();
@@ -17,7 +18,8 @@ export default class ScoreControl extends MainControl {
         });
 
         this.text.anchor.set(0.5);
-        this.text.position.set(window.innerWidth / 2, 50);
+        this.position = { x: window.innerWidth / 2, y: 50 };
+        this.text.position.set(this.position.x, this.position.y);
         this.text.scale.set(2);
         this.container.addChild(this.text);
     }
@@ -49,5 +51,12 @@ export default class ScoreControl extends MainControl {
         });
 
         ticker.start();
+    }
+
+    checkScoresCounter(amount: number): boolean {
+        if (this.counter >= amount) {
+            return true;
+        }
+        return false;
     }
 }
