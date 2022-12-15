@@ -30,5 +30,9 @@ This game template contains:
 
 ## help resources
 **portable node**: https://sourceforge.net/projects/nodejsportable/
+
 **sqlLite**: https://www.sqlite.org/
+
+[Backend](./pixiv6/backend/README.md)
+
  
