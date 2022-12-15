@@ -23,6 +23,7 @@ import GameScene from "app/scenes/GameScene";
 import GPacmanScene from "app/scenes/GPacmanScene";
 import OS_GameScene from "app/scenes/OS/GameScene";
 import SymbolsScene from "app/scenes/SymbolsScene";
+import MSPacmanScene from "./MS/MSPacmanScene2";
 
 export default class ChoiceScene extends BaseScene {
     @inject(FullScreenButtonControl, ChoiceScene.createFullScreenButton)
@@ -47,7 +48,7 @@ export default class ChoiceScene extends BaseScene {
         new TextButtonControl("Dev\nanimation\nscene", {target: DevAnimationScene, style: this.style, align:PivotType.TL}).name("item4_2"),
         new TextButtonControl("Gsap\nanimation\nscene", {target: GsapDevAnimationScene, style: this.style, align:PivotType.TL}).name("item4_3"),
         new TextButtonControl("OS_Pacman", {target: OS_GameScene, style: this.style, align:PivotType.TL}).name("item5_1"),
-        new TextButtonControl("MS_Pacman", {target: GsapDevAnimationScene, style: this.style, align:PivotType.TL}).name("item5_2"),
+        new TextButtonControl("MS_Pacman", {target: MSPacmanScene, style: this.style, align:PivotType.TL}).name("item5_2"),
         new TextButtonControl("GPacman", {target: GPacmanScene, style: this.style,align: PivotType.TL}).name("item5_3"),
         new TextButtonControl("Spine\nsymbols", {target: SymbolsScene, style: this.style, align:PivotType.TL}).name("item6_1"),
     ];
