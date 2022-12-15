@@ -4,7 +4,7 @@ import { getCollision } from "app/helpers/math";
 import { Sprite } from "pixi.js";
 import MainControl from "../MainControl";
 
-export default class DotsControl extends MainControl {
+export default class DotControl extends MainControl {
   private readonly dotColor = 0x000000;
   private readonly graphics: Graphics;
   readonly dotRadius = 5;
