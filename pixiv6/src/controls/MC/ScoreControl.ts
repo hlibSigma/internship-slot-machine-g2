@@ -38,7 +38,7 @@ export default class ScoreControl extends MainControl {
       const size = this.text.scale.x;
       if (expands) {
         this.text.scale.set(size + 0.09);
-        if (size >= 3) {
+        if (size >= 2.5) {
           expands = false;
         }
       } else {

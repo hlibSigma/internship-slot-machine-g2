@@ -5,7 +5,7 @@ import { Sprite } from "pixi.js";
 import MainControl from "../MainControl";
 
 export default class DotsControl extends MainControl {
-  private readonly dotColor = 0x00ff00;
+  private readonly dotColor = 0x000000;
   private readonly graphics: Graphics;
   readonly dotRadius = 5;
   readonly position: Point;
