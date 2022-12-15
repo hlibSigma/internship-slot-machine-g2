@@ -23,7 +23,7 @@ export default class GPacmanScene extends BaseScene {
     private dotRadius: number = 5;
     private scores: Text = new Text("");
     private speedFactor = 3;
-    private diraction: string = "right";
+    private direction: string = "right";
     private isGameStart: boolean = false;
     private readonly mainContainer = new Container();
     private readonly gameContainer = new Container();
@@ -56,17 +56,17 @@ export default class GPacmanScene extends BaseScene {
 
             const orientationLeft = Math.abs(this.vector.angle()) > (Math.PI / 2);
             if (orientationLeft) {
-                if (this.diraction === "right") {
+                if (this.direction === "right") {
                     this.pacman.scale.y *= -1;
-                    this.diraction = "left";
+                    this.direction = "left";
                 }
             }
 
             const orientationRight = Math.abs(this.vector.angle()) < (Math.PI / 2);
             if (orientationRight) {
-                if (this.diraction === "left") {
+                if (this.direction === "left") {
                     this.pacman.scale.y *= -1;
-                    this.diraction = "right";
+                    this.direction = "right";
                 }
             }
 

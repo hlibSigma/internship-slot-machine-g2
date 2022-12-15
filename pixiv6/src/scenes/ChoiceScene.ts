@@ -43,11 +43,11 @@ export default class ChoiceScene extends BaseScene {
         new TextButtonControl("Frag Shader scene", {target: FragShaderAnimationScene, style: this.style, align:PivotType.TL}).name("item3_1"),
         new TextButtonControl("Font Scene", {target: FontScene, style: this.style, align:PivotType.TL}).name("item3_2"),
         new TextButtonControl("Layout Scene", {target: LayoutScene, style: this.style, align:PivotType.TL}).name("item4_1"),
-        new TextButtonControl("GPacman", {target: GPacmanScene, style: this.style,align: PivotType.TL}).name("item4_2"),
-        // new TextButtonControl("Dev animation scene", {target: DevAnimationScene, style: this.style, align:PivotType.TL}).name("item4_2"),
+        new TextButtonControl("Dev animation scene", {target: DevAnimationScene, style: this.style, align:PivotType.TL}).name("item4_2"),
         new TextButtonControl("Gsap animation scene", {target: GsapDevAnimationScene, style: this.style, align:PivotType.TL}).name("item4_3"),
         new TextButtonControl("OS_Pacman", {target: OS_GameScene, style: this.style, align:PivotType.TL}).name("item5_1"),
         new TextButtonControl("MS_Pacman", {target: GsapDevAnimationScene, style: this.style, align:PivotType.TL}).name("item5_2"),
+        new TextButtonControl("GPacman", {target: GPacmanScene, style: this.style,align: PivotType.TL}).name("item5_3"),
         new TextButtonControl("Spine symbols", {target: SymbolsScene, style: this.style, align:PivotType.TL}).name("item6_1"),
     ];
 
