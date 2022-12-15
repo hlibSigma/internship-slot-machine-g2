@@ -44,6 +44,7 @@ export default class LoaderScene extends BaseScene {
         Loader.shared.add('MC_GHOST', 'assets/atlases/ghost.json');
         // Loader.shared.add('windmill', 'assets/atlases/windmill.json');
         Loader.shared.add('spineboy', 'assets/atlases/spineboy.json');
+        Loader.shared.add('symbols', 'assets/atlases/symbols.json');
         Loader.shared.add({name: "Scalter-SerifCondensed", url: "./assets/fonts/Scalter-SerifCondensed.otf"});
         Loader.shared.add({name: "neon_numbers", url: "./assets/fonts/bitmap/neon_numbers.xml"});
         Loader.shared.onComplete.add(this.onLoadComplete.bind(this));

@@ -22,6 +22,7 @@ import SpineControlScene from "app/scenes/SpineControlScene";
 import GameScene from "app/scenes/GameScene";
 import OS_GameScene from "app/scenes/OS/GameScene";
 import MC_GameScene from "app/scenes/MC/GameScene";
+import SymbolsScene from "app/scenes/SymbolsScene";
 
 export default class ChoiceScene extends BaseScene {
     @inject(FullScreenButtonControl, ChoiceScene.createFullScreenButton)
@@ -30,7 +31,7 @@ export default class ChoiceScene extends BaseScene {
     private layoutManager:LayoutManager = <any>{};
 
     private style:Partial<ITextStyle> = {
-        fontFamily: "Scalter-SerifCondensed",
+        fontFamily: "Arial",
         letterSpacing: 2,
         fontSize: 24
     };
@@ -43,10 +44,11 @@ export default class ChoiceScene extends BaseScene {
         new TextButtonControl("Font Scene", {target: FontScene, style: this.style, align:PivotType.TL}).name("item3_2"),
         new TextButtonControl("Layout Scene", {target: LayoutScene, style: this.style, align:PivotType.TL}).name("item4_1"),
         new TextButtonControl("Dev animation scene", {target: DevAnimationScene, style: this.style, align:PivotType.TL}).name("item4_2"),
-        // new TextButtonControl("Gsap dev animation scene", {target: GsapDevAnimationScene, style: this.style, align:PivotType.TL}).name("item5_1"),
+        new TextButtonControl("Gsap animation scene", {target: GsapDevAnimationScene, style: this.style, align:PivotType.TL}).name("item4_3"),
         new TextButtonControl("OS_Pacman", {target: OS_GameScene, style: this.style, align:PivotType.TL}).name("item5_1"),
         new TextButtonControl("MS_Pacman", {target: GsapDevAnimationScene, style: this.style, align:PivotType.TL}).name("item5_2"),
         new TextButtonControl("MC_Pacman", {target: MC_GameScene, style: this.style, align:PivotType.TL}).name("item5_2"),
+        new TextButtonControl("Spine symbols", {target: SymbolsScene, style: this.style, align:PivotType.TL}).name("item6_1"),
     ];
 
     compose():void {
