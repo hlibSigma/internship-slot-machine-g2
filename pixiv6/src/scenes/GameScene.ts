@@ -116,6 +116,7 @@ export default class GameScene extends BaseScene {
     private readonly originSpeedFactor = 3;
     private speedFactor = this.originSpeedFactor;
     private mainContainer: Container = new Container();
+    private topContainer: Container = new Container();
     @inject(LayoutManager)
     private layoutManager: LayoutManager = <any>{};
     private spawnTimeoutId: number = -1;
@@ -209,7 +210,7 @@ export default class GameScene extends BaseScene {
         title.name = "title";
         scores.name = "scores";
         this.scores = scores;
-        this.scene.addChild(this.mainContainer, title, scores);
+        this.scene.addChild(this.mainContainer, title, scores, this.topContainer);
         this.mainContainer.addChild(frame, pacman, emptySprite);
         const offsets = 60;
         const padding = 30;
@@ -275,6 +276,7 @@ export default class GameScene extends BaseScene {
 
     protected onResize(gameSize: GameSize) {
         super.onResize(gameSize);
+        this.topContainer.scale.copyFrom(this.mainContainer.scale);
     }
 
     protected checkMath(): void {
@@ -293,11 +295,11 @@ export default class GameScene extends BaseScene {
                 this.vector.normalize();
                 this.updateScores();
                 clearInterval(this.spawnTimeoutId);
-                this.spawnTimeoutId = setInterval(this.addNewDot.bind(this), 1000);
+                this.removeFromTicker(this.addNewDot);
+                this.addToTicker(this.addNewDot, {interval:1000});
                 gameModel.getHowler().play("pop" + (Math.round(Math.random() * 4) + 1))
                 let offsets = {offsetX: -(this.scores.width - 30), offsetY: -this.scores.height * .5};
                 await this.moveTo(dot, this.scores, offsets);
-                this.mainContainer.removeChild(dot);
                 this.scoresCounter++;
                 if (this.dots.length == 0) {
                     gameModel.getHowler().play("success");
@@ -312,21 +314,25 @@ export default class GameScene extends BaseScene {
         offsets = offsets ?? {offsetX: 0, offsetY: 0};
         offsets.offsetX = offsets.offsetX ?? 0;
         offsets.offsetY = offsets.offsetY ?? 0;
-        let localPosition = this.getLocalPosition(to, offsets.offsetX, offsets.offsetY);
+        let localToPosition = this.getLocalPosition(to, offsets.offsetX, offsets.offsetY);
+        let localFromPosition = this.getLocalPosition(dot);
         const duration = 1.75 + Math.random() * 0.5;
         const ease = `back.inOut(${Math.random() * .5 + 1})`;
-        return Promise.all([
+        this.topContainer.addChild(dot);
+        dot.position.copyFrom(localFromPosition);
+        await Promise.all([
             pgsap.to(dot, {
                 duration,
-                x: localPosition.x,
+                x: localToPosition.x,
                 ease,
             }),
             pgsap.to(dot, {
                 duration,
-                y: localPosition.y,
+                y: localToPosition.y,
                 ease,
             }),
         ]);
+        this.topContainer.removeChild(dot);
     }
 
     protected getLocalPosition(displayObject: DisplayObject, offsetX: number = 0, offsetY: number = 0, where?: Container): Point {
@@ -344,10 +350,10 @@ export default class GameScene extends BaseScene {
         }
 
         result.set(
-            result.x / this.mainContainer.parent.scale.x,
-            result.y / this.mainContainer.parent.scale.y
+            result.x / this.topContainer.parent.scale.x,
+            result.y / this.topContainer.parent.scale.y
         );
-        where = where ? where : this.mainContainer;
+        where = where ? where : this.topContainer;
         return where.toLocal(result);
     }
 
