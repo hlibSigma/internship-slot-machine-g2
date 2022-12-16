@@ -10,5 +10,8 @@ export default class SlotMachineScene extends BaseScene {
     compose() {
         this.addControl(this.background);
         this.addControl(this.reel);
+        this.reel.startSpinning();
+
+        setTimeout(this.reel.stopSpinning, 10000);
     }
 }
