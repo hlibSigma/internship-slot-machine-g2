@@ -20,6 +20,7 @@ export default class GameScene extends BaseScene {
     private readonly background = new BackgroundControl(
         Resources.getSingleTexture("MC_GAME-BG")
     );
+    private totalDots: number = 0;
 
     compose(): void {
         const textButtonControl = new TextButtonControl("Back");
@@ -40,6 +41,7 @@ export default class GameScene extends BaseScene {
         for (let i = 100; i < width - 100; i += 100) {
             for (let j = 100; j < height - 100; j += 100) {
                 const dot = new DotControl(new Point(i, j));
+                this.totalDots++;
                 this.addControl(dot);
                 this.dots.push(dot);
             }
@@ -108,7 +110,7 @@ export default class GameScene extends BaseScene {
     }
 
     private checkWin() {
-        if (this.score.checkScoresCounter(5)) {
+        if (this.score.checkScoresCounter(this.totalDots)) {
             this.sceneManager.navigate(WinScreen);
         }
     }
