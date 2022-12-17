@@ -123,38 +123,39 @@ export default class MSPacmanScene extends BaseScene {
     private pacmanTexture1 = StrictResourcesHelper.getTexture("PACMAN", "pack1.png");
     private pacmanTexture2 = StrictResourcesHelper.getTexture("PACMAN", "pack2.png");
 
-    
-    activate() {
-        super.activate();      
-
-        let gamestart = () => {
-            this.dots = [];
-            this.scoresCounter = 0;
-            const enemyBoss = this.enemyBoss;
-            enemyBoss.texture = this.enemyBossTexture;
-            enemyBoss.anchor.x = 0.5;
-            enemyBoss.anchor.y = 0.5;
-            enemyBoss.scale.set(0.125);
-            enemyBoss.position.set(400 / 2, 300 / 2);
-            pacman.anchor.x = 0.5;
-            pacman.anchor.y = 0.5;
-            pacman.scale.set(0.125);
-            pacman.position.set(800 / 2, 600 / 2);
-            this.scores.text = `Scores: ${this.scoresCounter}`;
-            this.isGameStart = true;
-            this.mainContainer.addChild(this.bground, this.title, this.scores, this.pacman, enemyBoss);
-            this.scene.removeChild(this.gameContainer);
-            this.scene.addChild(this.mainContainer);
-            let offsets = 180;
-            for (let i = 1; i < 5; i++) {
-                for (let j = 1; j < 6; j++) {
-                    let dot = createDot({x: i * offsets, y: j * offsets / 2});
-                    this.mainContainer.addChild(dot);
-                    this.dots.push(dot);
-                }
+    private gamestart = () => {
+        this.dots = [];
+        this.scoresCounter = 0;
+        const enemyBoss = this.enemyBoss;
+        enemyBoss.texture = this.enemyBossTexture;
+        enemyBoss.anchor.x = 0.5;
+        enemyBoss.anchor.y = 0.5;
+        enemyBoss.scale.set(0.125);
+        enemyBoss.position.set(400 / 2, 300 / 2);
+        this.pacman = new AnimatedSprite([
+            this.pacmanTexture1,
+            this.pacmanTexture2,
+        ], true);
+        this.pacman.anchor.x = 0.5;
+        this.pacman.anchor.y = 0.5;
+        this.pacman.scale.set(0.125);
+        this.pacman.position.set(800 / 2, 600 / 2);
+        this.scores.text = `Scores: ${this.scoresCounter}`;
+        this.isGameStart = true;
+        this.mainContainer.addChild(this.bground, this.title, this.scores, this.pacman, enemyBoss);
+        this.scene.removeChild(this.gameContainer);
+        this.scene.addChild(this.mainContainer);
+        let offsets = 180;
+        for (let i = 1; i < 5; i++) {
+            for (let j = 1; j < 6; j++) {
+                let dot = this.createDot({x: i * offsets, y: j * offsets / 2});
+                this.mainContainer.addChild(dot);
+                this.dots.push(dot);
             }
+        }
     }
-        const createDot = (position: {x: number, y: number}) => {
+    
+    private createDot = (position: {x: number, y: number}) => {
             const dot = new Graphics().beginFill(0xff0000).drawCircle(
                 0,
                 0,
@@ -162,7 +163,12 @@ export default class MSPacmanScene extends BaseScene {
             );
             dot.position.set(position.x, position.y);
             return dot;
-        };
+    };
+    
+    activate() {
+        super.activate();      
+
+        
         
         let style = {
             fill: [
@@ -187,14 +193,8 @@ export default class MSPacmanScene extends BaseScene {
         this.titleEnd.anchor.x = 0.5;
         this.finishContainer.addChild(this.titleEnd);
         this.scores = new Text(`Scores: ${this.scoresCounter}`, this.style);
-        const pacmanTexture1 = StrictResourcesHelper.getTexture("PACMAN", "pack1.png");
-        const pacmanTexture2 = StrictResourcesHelper.getTexture("PACMAN", "pack2.png");
         const bgTexture = StrictResourcesHelper.getTexture("GPACMANICONS", "game_bg.png");
         
-        this.pacman = new AnimatedSprite([
-            pacmanTexture1,
-            pacmanTexture2,
-        ], true);
         this.title.anchor.x = 0.5;
         this.title.position.set(
             800 / 2,
@@ -222,17 +222,12 @@ export default class MSPacmanScene extends BaseScene {
         this.bground.texture = bgTexture;
         this.gameContainer.addChild(titleStart);
         this.scene.addChild(this.gameContainer);
-        this.pacman = new AnimatedSprite([
-            this.pacmanTexture1,
-            this.pacmanTexture2,
-        ], true);
-        const pacman = this.pacman;
 
-        this.addToTicker(()=>{pacman.texture = pacman.texture === this.pacmanTexture2 ? this.pacmanTexture1 : this.pacmanTexture2}, {interval:300});
+        this.addToTicker(()=>{this.pacman.texture = this.pacman.texture === this.pacmanTexture2 ? this.pacmanTexture1 : this.pacmanTexture2}, {interval:300});
 
         if (!this.isGameStart) {
             titleStart.interactive = true;
-            titleStart.on('mousedown', gamestart)
+            titleStart.on('mousedown', this.gamestart)
         }
     }
 
@@ -344,10 +339,10 @@ export default class MSPacmanScene extends BaseScene {
     }
 
     protected endGame(resultText: string) {
-        this.titleEnd.text = `The game is over! You ${resultText}!`;
-        this.titleEnd.scale.set(2)
-        // this.titleEnd.interactive = true;
-        // this.titleEnd.on('mousedown', this.activate)
+        this.titleEnd.text = `The game is over! You ${resultText}! Click here to restart`;
+        this.titleEnd.scale.set(1.4)
+        this.titleEnd.interactive = true;
+        this.titleEnd.on('mousedown', this.gamestart)
         this.scene.removeChild(this.mainContainer);
         this.mainContainer.removeChild(this.enemyBoss);
         this.mainContainer.removeChild(this.pacman);
