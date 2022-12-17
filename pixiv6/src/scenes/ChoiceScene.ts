@@ -23,7 +23,7 @@ import GameScene from "app/scenes/GameScene";
 import GPacmanScene from "app/scenes/GPacmanScene";
 import OS_GameScene from "app/scenes/OS/GameScene";
 import SymbolsScene from "app/scenes/SymbolsScene";
-import MSPacmanScene from "./MS/MSPacmanScene2";
+import MSPacmanScene from "./MS/MSPacmanScene";
 
 export default class ChoiceScene extends BaseScene {
     @inject(FullScreenButtonControl, ChoiceScene.createFullScreenButton)

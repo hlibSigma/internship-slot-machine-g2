@@ -18,7 +18,6 @@ export default class MSPacmanScene extends BaseScene {
 
     private readonly vector: Vector = new Vector(0, 0);
     private dots: Array<Container> = [];
-    private enemyArray: Array<Container> = [];
     private pacman: Sprite = new Sprite();
     private readonly enemyBoss: Sprite = new Sprite();
     private readonly bground: Sprite = new Sprite();
@@ -130,7 +129,6 @@ export default class MSPacmanScene extends BaseScene {
 
         let gamestart = () => {
             this.dots = [];
-            this.enemyArray = [];
             this.scoresCounter = 0;
             const enemyBoss = this.enemyBoss;
             enemyBoss.texture = this.enemyBossTexture;
@@ -178,8 +176,6 @@ export default class MSPacmanScene extends BaseScene {
             strokeThickness: 1
         };
 
-        const title = new Text("Game Pacman", style);
-
         const introText = new Text("Welcome to the game", this.style);
         const titleStart = new Text("START", this.style)
         titleStart.scale.set(3);
@@ -191,12 +187,10 @@ export default class MSPacmanScene extends BaseScene {
         this.titleEnd.anchor.x = 0.5;
         this.finishContainer.addChild(this.titleEnd);
         this.scores = new Text(`Scores: ${this.scoresCounter}`, this.style);
-        const frame = new Graphics().lineStyle(2, 0x00FF00, 0.4).drawRect(2, 2, 800 - 4, 600 - 4);
         const pacmanTexture1 = StrictResourcesHelper.getTexture("PACMAN", "pack1.png");
         const pacmanTexture2 = StrictResourcesHelper.getTexture("PACMAN", "pack2.png");
         const bgTexture = StrictResourcesHelper.getTexture("GPACMANICONS", "game_bg.png");
         
-        const enemyBossTexture = StrictResourcesHelper.getTexture("GPACMANICONS", "enemyBoss.png");
         this.pacman = new AnimatedSprite([
             pacmanTexture1,
             pacmanTexture2,
@@ -234,10 +228,7 @@ export default class MSPacmanScene extends BaseScene {
         ], true);
         const pacman = this.pacman;
 
-        setInterval(() => {
-            pacman.texture = pacman.texture === this.pacmanTexture2 ? this.pacmanTexture1 : this.pacmanTexture2;
-        }, 300);
-
+        this.addToTicker(()=>{pacman.texture = pacman.texture === this.pacmanTexture2 ? this.pacmanTexture1 : this.pacmanTexture2}, {interval:300});
 
         if (!this.isGameStart) {
             titleStart.interactive = true;
@@ -328,38 +319,28 @@ export default class MSPacmanScene extends BaseScene {
     }
 
     protected flyToScore(dot: DisplayObject) {
-        const offset = 2.5;
-        const idInterval = setInterval(() => {
-            const vectorDotPossibleX = new Vector(dot.position.x + offset, dot.position.y);
-            const vectorDotPossibleY = new Vector(dot.position.x, dot.position.y - offset);
-
-
-            const distanceDotPossibleX = distance(vectorDotPossibleX, this.scores);
-            const distanceDotPossibleY = distance(vectorDotPossibleY, this.scores);
-
-            if (distanceDotPossibleX < distanceDotPossibleY) {
-                dot.position.x = vectorDotPossibleX.x;
-                dot.position.y = vectorDotPossibleX.y;
-            } else {
-                dot.position.x = vectorDotPossibleY.x;
-                dot.position.y = vectorDotPossibleY.y;
-            }
-            if (distanceDotPossibleX < this.scores.width * .5 + this.dotRadius || distanceDotPossibleY < this.scores.width * .5 + this.dotRadius) {
-                this.mainContainer.removeChild(dot);
-                clearInterval(idInterval);
-            }
-        }, 100 / 60);
+        let deltaX = (this.scores.position.x - dot.position.x) / 50;
+        let deltaY = (dot.position.y - this.scores.position.y) / 50;
+        
+        this.addToTicker(() => {
+            dot.position.x += deltaX
+            dot.position.y -= deltaY;
+            distance(dot.position, this.scores.position) < this.scores.width
+                ? this.mainContainer.removeChild(dot)
+                : null
+        }, { interval: 20, callsLimit: 100 })
     }
 
-    protected animationScore(score: number) {
+    protected animationScore(score: number): void {
         this.scores.scale.set(2)
-        setTimeout(() => {
+        this.addToTicker(() => {
             this.scores.scale.set(1)
             this.scores.text = `Scores: ${score}`
-        }, 200)
+        }, {interval:200, callsLimit:1})
+
         
         this.bground.position.x += 20;
-        setTimeout(() => this.bground.position.x -= 20, 200)
+        this.addToTicker(()=>{this.bground.position.x -= 20}, {interval:200, callsLimit:1});
     }
 
     protected endGame(resultText: string) {
@@ -372,7 +353,6 @@ export default class MSPacmanScene extends BaseScene {
         this.mainContainer.removeChild(this.pacman);
         this.scene.addChild(this.finishContainer);
         this.dots = [];
-        this.enemyArray = [];
         this.enemyBoss.rotation = 0;
         this.pacman.rotation = 0;
         this.vector.x = 0;
