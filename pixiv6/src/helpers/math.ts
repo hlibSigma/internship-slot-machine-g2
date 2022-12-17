@@ -61,13 +61,12 @@ export function lerp(value1: number, value2: number, amount: number) {
     return (1 - amount) * value1 + amount * value2;
 }
 
-export const getCollision = (
+export const hasCollision = (
     pos1: { x: number; y: number },
     width1: number,
     pos2: { x: number; y: number },
     width2: number
 ) => {
     const dist = distance(pos1, pos2);
-    if (dist < width1 * 0.5 + width2 * 0.5) return true;
-    return false;
+    return dist < width1 * 0.5 + width2 * 0.5;
 };

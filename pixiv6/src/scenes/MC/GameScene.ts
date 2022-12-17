@@ -6,7 +6,7 @@ import ChoiceScene from "../ChoiceScene";
 import PacmanControl from "app/controls/MC/PacmanControl";
 import DotControl from "app/controls/MC/DotControl";
 import { Point, Ticker } from "pixi.js";
-import { distance, getCollision, Vector } from "app/helpers/math";
+import { distance, hasCollision, Vector } from "app/helpers/math";
 import ScoreControl from "app/controls/MC/ScoreControl";
 import GhostControl from "app/controls/MC/GhostControler";
 import gameModel from "app/model/GameModel";
@@ -50,14 +50,14 @@ export default class GameScene extends BaseScene {
 
     private checkCollision() {
         this.dots.forEach(async (dot) => {
-            if (
-                getCollision(
-                    dot.position,
-                    dot.dotRadius,
-                    this.pacman.sprite.position,
-                    this.pacman.sprite.width
-                )
-            ) {
+            const hasCollisions = hasCollision(
+                dot.position,
+                dot.dotRadius,
+                this.pacman.sprite.position,
+                this.pacman.sprite.width
+            );
+
+            if (hasCollisions) {
                 this.score.increment();
                 this.dots.splice(this.dots.indexOf(dot), 1);
                 gameModel
@@ -103,13 +103,13 @@ export default class GameScene extends BaseScene {
         }
     }
 
-    private checkCollisionGhost() {
+    private hasCollisionGhost() {
         if (this.ghost.checkGhostCollision(this.pacman.sprite)) {
             this.sceneManager.navigate(ChoiceScene);
         }
     }
 
-    private checkWin() {
+    private isWin() {
         if (this.score.checkScoresCounter(this.totalDots)) {
             this.sceneManager.navigate(WinScreen);
         }
@@ -121,7 +121,7 @@ export default class GameScene extends BaseScene {
         this.checkCollision();
         this.checkBorders();
         this.ghost.update(delta, this.pacman.sprite);
-        this.checkCollisionGhost();
-        this.checkWin();
+        this.hasCollisionGhost();
+        this.isWin();
     }
 }

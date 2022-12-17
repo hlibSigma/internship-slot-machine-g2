@@ -54,7 +54,7 @@ export default class PacmanControl extends MainControl {
 
     positionUpdate(delta: number) {
         this.move(delta);
-        this.rotate(delta);
+        this.rotate();
     }
 
     private move(delta: number) {
@@ -64,7 +64,7 @@ export default class PacmanControl extends MainControl {
         position.y += this.moveVector.y * this.speed * delta;
     }
 
-    private rotate(delta: number) {
+    private rotate() {
         const angle = this.moveVector.angle();
         const vector = this.moveVector;
 
@@ -74,6 +74,6 @@ export default class PacmanControl extends MainControl {
             this.sprite.scale.y = 0.2;
         }
 
-        this.sprite.rotation = angle * delta;
+        this.sprite.rotation = angle;
     }
 }

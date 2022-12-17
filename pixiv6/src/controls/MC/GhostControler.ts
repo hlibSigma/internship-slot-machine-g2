@@ -1,6 +1,6 @@
 import { Texture } from "@pixi/core";
 import { Sprite } from "@pixi/sprite";
-import { distance, getCollision, Vector } from "app/helpers/math";
+import { distance, hasCollision, Vector } from "app/helpers/math";
 import StrictResourcesHelper from "app/pixi/StrictResourcesHelper";
 import { Point } from "pixi.js";
 import MainControl from "../MainControl";
@@ -43,7 +43,7 @@ export default class GhostControl extends MainControl {
 
     checkGhostCollision(pacman: Sprite): boolean {
         if (
-            getCollision(
+            hasCollision(
                 this.ghost.position,
                 this.ghost.width,
                 pacman.position,
