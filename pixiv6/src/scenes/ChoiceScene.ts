@@ -23,6 +23,7 @@ import GameScene from "app/scenes/GameScene";
 import GPacmanScene from "app/scenes/GPacmanScene";
 import OS_GameScene from "app/scenes/OS/GameScene";
 import SymbolsScene from "app/scenes/SymbolsScene";
+import SlotMachineScene from "app/scenes/SlotMachineScene";
 import MS_PANEL from "./MS_Panel";
 
 export default class ChoiceScene extends BaseScene {
@@ -51,7 +52,8 @@ export default class ChoiceScene extends BaseScene {
         new TextButtonControl("MS_Pacman", {target: GsapDevAnimationScene, style: this.style, align:PivotType.TL}).name("item5_2"),
         new TextButtonControl("MS_PANEL", {target: MS_PANEL, style: this.style, align:PivotType.TL}).name("item3_3"),
         new TextButtonControl("GPacman", {target: GPacmanScene, style: this.style,align: PivotType.TL}).name("item5_3"),
-        new TextButtonControl("Spine\nsymbols", {target: SymbolsScene, style: this.style, align:PivotType.TL}).name("item6_1"),
+        new TextButtonControl("Slot\nMachine", {target: SlotMachineScene, style: this.style, align:PivotType.TL}).name("item6_1"),
+        new TextButtonControl("Spine\nsymbols", {target: SymbolsScene, style: this.style, align:PivotType.TL}).name("item6_2"),
     ];
 
     compose():void {

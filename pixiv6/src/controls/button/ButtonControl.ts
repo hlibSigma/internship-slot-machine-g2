@@ -5,6 +5,7 @@ import Signal from "app/helpers/signals/signal/Signal";
 import {Container} from "@pixi/display";
 import {Filter, Texture} from "@pixi/core";
 import {Sprite} from "@pixi/sprite";
+import {InteractionEvent} from "@pixi/interaction";
 
 export type ButtonControlOptions = {hoverColor?:number, align?:PivotType, target?:any}
 export default class ButtonControl extends MainControl {
@@ -36,7 +37,7 @@ export default class ButtonControl extends MainControl {
             this.container.filters = [...this.additionalFilters];
         });
         // this.button.hitArea = new Polygon(getCirclePolygons(this.button.width * .5, 10));
-        this.button.on("pointerdown", () => {
+        this.button.on("pointertap", () => {
             if (this.isEnable()) {
                 this.onClick.emit(this);
             }
