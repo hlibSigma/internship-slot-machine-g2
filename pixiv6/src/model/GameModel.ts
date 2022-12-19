@@ -4,10 +4,13 @@ import constructor from "app/model/ContructortTypes";
 import sounds from "res/sounds/SOUND_FILE.soundmap.json";
 import {Howl} from 'howler';
 import dependencyManager from "app/model/injection/InjectDecorator";
+import {TInitResponse} from "app/model/TGameData";
 
 type InjectionType<T extends MainControl> = Function & {prototype:T};
 
 export type TOrientation = "down" | "up" | "left" | "right";
+
+type TInitGameData = TInitResponse;
 
 export class GameModel {
 
@@ -19,6 +22,36 @@ export class GameModel {
     public readonly updateLayout:Signal<GameSize> = new Signal<GameSize>();
     public readonly pauseGame:Signal<{pause:boolean}> = new Signal<{pause:boolean}>();
     private howler:Howl = <any>{};
+    //todo: it should be done by a server response [#17];
+    mainGameInfo: TInitGameData & {reels:{amount:number, height:number}} = {
+        reels:{
+            amount:5,
+            height:3,
+        },
+        bets:[],
+        autoPlays:[],
+        lines:[],
+        stakes:[],
+        strips:[],
+        symbols:[],
+        user:{
+            currency:"",
+            lang:"",
+            denominator:1,
+            login:"",
+        },
+        userStats:{
+            freeGames:1,
+            balance:1,
+            reelStops:[0,0,0,0,0]
+        },
+    };
+    gameSignals = {
+        reels: {
+            updateSkin: new Signal<string>(),
+            updateAnimation: new Signal<string>(),
+        },
+    };
 
     getHowler():Howl {
         return this.howler;
