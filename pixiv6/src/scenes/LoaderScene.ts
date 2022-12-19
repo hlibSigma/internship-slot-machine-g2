@@ -9,6 +9,7 @@ import ChoiceScene from "app/scenes/ChoiceScene";
 import { Container } from "@pixi/display";
 import { Application } from "@pixi/app";
 import { Loader } from "@pixi/loaders";
+import loader from "ts-loader";
 
 export default class LoaderScene extends BaseScene {
     private readonly gameTitle: Container;
@@ -32,6 +33,7 @@ export default class LoaderScene extends BaseScene {
         this.scene.addChild(this.gameTitle);
         this.scene.addChild(this.simpleLoaderContainer);
         new AlphaFadeInEffect(this.simpleLoaderContainer, this.app.ticker);
+        Loader.shared.add('SLOT-MASHINE_BG', "assets/images/slot-mashine__background.jpg");
         Loader.shared.add('OS_ATLAS', 'assets/atlases/OS_atlas.json');
         Loader.shared.add('OS_GAME-BG', 'assets/images/OS_game-bg.jpg');
         Loader.shared.add('OS_WIN-BG', 'assets/images/OS_win-bg.png');
@@ -42,6 +44,9 @@ export default class LoaderScene extends BaseScene {
         // Loader.shared.add('windmill', 'assets/atlases/windmill.json');
         Loader.shared.add('spineboy', 'assets/atlases/spineboy.json');
         Loader.shared.add('symbols', 'assets/atlases/symbols.json');
+        Loader.shared.add('reels', 'assets/atlases/reels.json');
+        Loader.shared.add('pop_up', 'assets/atlases/pop_up.json');
+        Loader.shared.add('logo', 'assets/atlases/logo.json');
         Loader.shared.add({name: "Scalter-SerifCondensed", url: "./assets/fonts/Scalter-SerifCondensed.otf"});
         Loader.shared.add({name: "neon_numbers", url: "./assets/fonts/bitmap/neon_numbers.xml"});
         Loader.shared.onComplete.add(this.onLoadComplete.bind(this));
