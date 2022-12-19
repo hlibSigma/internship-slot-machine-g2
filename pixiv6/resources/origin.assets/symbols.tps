@@ -185,6 +185,51 @@
         </struct>
         <key>individualSpriteSettings</key>
         <map type="IndividualSpriteSettingsMap">
+            <key type="filename">symbols/BAR.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0,0</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>67,22,133,44</rect>
+                <key>scale9Paddings</key>
+                <rect>67,22,133,44</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">symbols/BAR_2.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0,0</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>67,45,133,89</rect>
+                <key>scale9Paddings</key>
+                <rect>67,45,133,89</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">symbols/BAR_3.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0,0</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>67,67,133,133</rect>
+                <key>scale9Paddings</key>
+                <rect>67,67,133,133</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
             <key type="filename">symbols/apple.png</key>
             <key type="filename">symbols/blueberry.png</key>
             <key type="filename">symbols/cherry.png</key>
@@ -219,6 +264,36 @@
                 <rect>45,46,90,91</rect>
                 <key>scale9Paddings</key>
                 <rect>45,46,90,91</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">symbols/coin.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0,0</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>63,63,126,126</rect>
+                <key>scale9Paddings</key>
+                <rect>63,63,126,126</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">symbols/diamond.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0,0</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>65,61,131,123</rect>
+                <key>scale9Paddings</key>
+                <rect>65,61,131,123</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
