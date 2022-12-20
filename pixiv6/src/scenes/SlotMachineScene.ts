@@ -12,8 +12,6 @@ export default class SlotMachineScene extends BaseScene {
     compose() {
         this.addControl(this.background);
         this.addControl(this.reelBox);
-
-        this.reelBox.startSpinning();
     }
 
     protected onResize(gameSize: GameSize) {

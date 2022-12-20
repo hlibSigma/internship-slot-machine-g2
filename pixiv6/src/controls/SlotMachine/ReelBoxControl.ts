@@ -2,6 +2,7 @@ import { Ticker } from "@pixi/ticker";
 
 import MainControl, { PivotType } from "app/controls/MainControl";
 import ReelControl from "app/controls/SlotMachine/ReelControl";
+import gameModel from "app/model/GameModel";
 
 export default class ReelBoxControl extends MainControl {
     public isSpinning = false;
@@ -19,6 +20,8 @@ export default class ReelBoxControl extends MainControl {
         super();
 
         this.generateReels();
+        this.setupHooks();
+
         this.ticker.start();
     }
 
@@ -46,6 +49,17 @@ export default class ReelBoxControl extends MainControl {
                 }
             });
         });
+    }
+
+    private setupHooks() {
+        gameModel.startSpinning.add(this.startSpinning, this);
+
+        for (const hook of gameModel.reelBoxOnChangeHooks) {
+            hook.signal.add((value: any) => {
+                this[hook.propName as keyof this] = value;
+                this.generateReels();
+            }, this);
+        }
     }
 
     private clearReels() {

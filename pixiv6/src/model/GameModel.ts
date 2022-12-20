@@ -14,7 +14,28 @@ export type TOrientation = "down" | "up" | "left" | "right";
 
 type TInitGameData = TInitResponse;
 
+class OnChangeHook<T> {
+    public readonly signal = new Signal<T>();
+
+    constructor(
+        public readonly propName: string,
+        public readonly defaultValue: T,
+    ) {}
+
+    public get target() {
+        return { [this.propName]: this.defaultValue };
+    }
+}
+
 export class GameModel {
+    public readonly startSpinning = new Signal<void>();
+    public readonly reelBoxOnChangeHooks = [
+        new OnChangeHook("reelsCount", 5),
+        new OnChangeHook("symbolsPerReel", 16),
+        new OnChangeHook("width", 1500),
+        new OnChangeHook("initialTime", 1000),
+        new OnChangeHook("stopDelay", 300),
+    ];
 
     public readonly updateOrientation:Signal<TOrientation> = new Signal<TOrientation>();
     public readonly setSpeedFactor:Signal<number> = new Signal<number>();
