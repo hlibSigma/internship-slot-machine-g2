@@ -2,6 +2,7 @@ import MainControl from "app/controls/MainControl";
 import {Container} from "@pixi/display";
 import gameModel from "app/model/GameModel";
 import SpineControl from "app/controls/SpineControl";
+import {promiseDelay} from "app/helpers/TimeHelper";
 
 export default class ReelControl extends MainControl {
     private skinIndex = 0;
@@ -56,5 +57,13 @@ export default class ReelControl extends MainControl {
 
     updateAnimations(animation: string) {
         this.symbols.forEach(value => value.play(animation, {trackIndex: 1, loop: true}));
+    }
+
+    async spin() {
+        await Promise.all(this.symbols.map(async symbol => {
+            symbol.play("dim");
+            await promiseDelay(2.5 * 1000);
+            symbol.play("undim");
+        }));
     }
 }

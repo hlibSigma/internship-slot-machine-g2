@@ -6,6 +6,7 @@ import {Howl} from 'howler';
 import dependencyManager from "app/model/injection/InjectDecorator";
 import {TFullUserData, TInitResponse, TResponse, TSpinResponse} from "app/server/fruit/service/typing";
 import ServerCommunicator from "app/server/fruit/ServerCommunicator";
+import GameSignals from "app/model/GameSignals";
 
 type InjectionType<T extends MainControl> = Function & {prototype:T};
 
@@ -26,44 +27,22 @@ export class GameModel {
     public readonly game = {
         fruit: {
             serverCommunicator: new ServerCommunicator("https://us-central1-internship-slot-backend.cloudfunctions.net/app/"),
-        }
+        },
+        signals: new GameSignals()
     };
     //todo: it should be done by a server response [#17];
-    mainGameInfo: TInitGameData & {reels:{amount:number, height:number}} = {
-        reels:{
-            amount:5,
-            height:3,
-        },
-        bets:[],
-        autoPlays:[],
-        lines:[],
-        strips:[],
-        symbols:[],
-        user:{
-            currency:"",
-            lang:"",
-            denominator:1,
-            login:"",
-        },
-        userStats:{
-            freeGames:1,
-            balance:1,
-            reelStops:[0,0,0,0,0]
-        },
-    };
-    gameSignals = {
-        reels: {
-            updateSkin: new Signal<string>(),
-            updateAnimation: new Signal<string>(),
-        },
-        data: {
-            login: new Signal<TInitResponse>(),
-            spin: new Signal<TSpinResponse>(),
-            users: new Signal<TFullUserData[]>(),
-            stopReel: new Signal<TResponse>(),
-            buyAmount: new Signal<TResponse>(),
-        }
-    };
+    mainGameInfo: (TInitGameData & {reels:{amount:number, height:number}}) = <any>{};
+
+    public readonly ready:Promise<void>;
+    constructor() {
+        this.ready = new Promise<void>(async resolve => {
+            let response = await this.game.fruit.serverCommunicator.login("Lo");
+            this.mainGameInfo = Object.assign(response, {
+                reels:{amount:5, height:3}
+            });
+            resolve();
+        })
+    }
 
     getHowler():Howl {
         return this.howler;

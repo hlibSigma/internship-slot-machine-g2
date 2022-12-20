@@ -10,31 +10,31 @@ export default class ServerCommunicator {
 
     async login(userName: string) {
         const response = await this.request.login(userName)
-        gameModel.gameSignals.data.login.emit(response);
+        gameModel.game.signals.data.login.emit(response);
         return response;
     }
 
     async spin(betId: number) {
         const response = await this.request.spin(betId);
-        gameModel.gameSignals.data.spin.emit(response);
+        gameModel.game.signals.data.spin.emit(response);
         return response;
     }
 
     async getAllUsers() {
         const response = await this.request.getAllUsers();
-        gameModel.gameSignals.data.users.emit(response);
+        gameModel.game.signals.data.users.emit(response);
         return response;
     }
 
     async forceReelStop(reels: Array<number>) {
         const response = await this.request.forceReelStop(reels);
-        gameModel.gameSignals.data.stopReel.emit(response);
+        gameModel.game.signals.data.stopReel.emit(response);
         return response;
     }
 
     async buyCredits(bet: number) {
         const response = await this.request.buyCredits(bet);
-        gameModel.gameSignals.data.buyAmount.emit(response);
+        gameModel.game.signals.data.buyAmount.emit(response);
         return response;
     }
 
