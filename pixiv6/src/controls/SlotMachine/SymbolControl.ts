@@ -6,7 +6,7 @@ export default class SymbolControl extends MainControl {
 
     constructor(
         private readonly size: number,
-        private readonly offsetY: number,
+        private readonly offsetY = 0,
     ) {
         super();
 

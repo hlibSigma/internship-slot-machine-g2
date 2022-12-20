@@ -7,7 +7,7 @@ export default class ReelControl extends MainControl {
     constructor(
         private readonly symbolsCount: number,
         private readonly width: number,
-        private readonly offsetX: number,
+        private readonly offsetX = 0,
     ) {
         super();
 

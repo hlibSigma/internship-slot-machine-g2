@@ -5,7 +5,7 @@ import ReelControl from "app/controls/SlotMachine/ReelControl";
 
 export default class SlotMachineScene extends BaseScene {
     private readonly background = new BackgroundControl(Resources.getSingleTexture("SLOT-MASHINE_BG"));
-    private readonly reel = new ReelControl(16, 300, 0);
+    private readonly reel = new ReelControl(16, 300);
 
     compose() {
         this.addControl(this.background);
