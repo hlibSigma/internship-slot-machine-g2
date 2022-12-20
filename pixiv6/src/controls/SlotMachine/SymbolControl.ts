@@ -17,6 +17,10 @@ export default class SymbolControl extends MainControl {
         this.add(this.spine);
     }
 
+    public spinTo(target: number, bounds: number) {
+        this.spine.container.y = (target % bounds) * this.size - this.size;
+    }
+
     private static getRandomSkin() {
         const skins = [
             "wild", "scatter",
