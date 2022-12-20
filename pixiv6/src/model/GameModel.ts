@@ -4,7 +4,9 @@ import constructor from "app/model/ContructortTypes";
 import sounds from "res/sounds/SOUND_FILE.soundmap.json";
 import {Howl} from 'howler';
 import dependencyManager from "app/model/injection/InjectDecorator";
-import {TInitResponse} from "app/model/TGameData";
+import {TFullUserData, TInitResponse, TResponse, TSpinResponse} from "app/server/fruit/service/typing";
+import ServerCommunicator from "app/server/fruit/ServerCommunicator";
+import GameSignals from "app/model/GameSignals";
 
 type InjectionType<T extends MainControl> = Function & {prototype:T};
 
@@ -22,36 +24,25 @@ export class GameModel {
     public readonly updateLayout:Signal<GameSize> = new Signal<GameSize>();
     public readonly pauseGame:Signal<{pause:boolean}> = new Signal<{pause:boolean}>();
     private howler:Howl = <any>{};
+    public readonly game = {
+        fruit: {
+            serverCommunicator: new ServerCommunicator("https://us-central1-internship-slot-backend.cloudfunctions.net/app/"),
+        },
+        signals: new GameSignals()
+    };
     //todo: it should be done by a server response [#17];
-    mainGameInfo: TInitGameData & {reels:{amount:number, height:number}} = {
-        reels:{
-            amount:5,
-            height:3,
-        },
-        bets:[],
-        autoPlays:[],
-        lines:[],
-        stakes:[],
-        strips:[],
-        symbols:[],
-        user:{
-            currency:"",
-            lang:"",
-            denominator:1,
-            login:"",
-        },
-        userStats:{
-            freeGames:1,
-            balance:1,
-            reelStops:[0,0,0,0,0]
-        },
-    };
-    gameSignals = {
-        reels: {
-            updateSkin: new Signal<string>(),
-            updateAnimation: new Signal<string>(),
-        },
-    };
+    mainGameInfo: (TInitGameData & {reels:{amount:number, height:number}}) = <any>{};
+
+    public readonly ready:Promise<void>;
+    constructor() {
+        this.ready = new Promise<void>(async resolve => {
+            let response = await this.game.fruit.serverCommunicator.login("Lo");
+            this.mainGameInfo = Object.assign(response, {
+                reels:{amount:5, height:3}
+            });
+            resolve();
+        })
+    }
 
     getHowler():Howl {
         return this.howler;

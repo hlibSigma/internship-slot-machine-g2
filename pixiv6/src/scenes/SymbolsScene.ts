@@ -7,6 +7,7 @@ import ChoiceScene from "app/scenes/ChoiceScene";
 import SceneManager from "app/scenes/SceneManager";
 import BackgroundScene from "app/scenes/subscenes/BackgroundScene";
 import ReelScene from "app/scenes/subscenes/ReelScene";
+import BetPanelScene from "app/scenes/subscenes/BetPanelScene";
 
 export default class SymbolsScene extends BaseScene {
 
@@ -36,11 +37,11 @@ export default class SymbolsScene extends BaseScene {
     ];
 
 
-    compose():void {
+    async compose() {
         new SceneManager(this.app, true).navigate(BackgroundScene);
         new SceneManager(this.app, true).navigate(ReelScene);
-        // new SceneManager(this.app, true).navigate(BetPanelScene);
-
+        new SceneManager(this.app, true).navigate(BetPanelScene);
+        await gameModel.ready;
         this.textButtonControl.onClick.add(() => {
             gameModel.getHowler().play("btn_click");
             this.sceneManager.navigate(ChoiceScene);
@@ -49,13 +50,13 @@ export default class SymbolsScene extends BaseScene {
             this.skinIndex++;
             this.skinIndex = this.skinIndex % this.skins.length
             gameModel.getHowler().play("btn_click");
-            gameModel.gameSignals.reels.updateSkin.emit(this.skins[this.skinIndex]);
+            gameModel.game.signals.reels.updateSkin.emit(this.skins[this.skinIndex]);
         }, this);
         this.nextAnimationButtonControl.onClick.add(() => {
             this.animationIndex++;
             this.animationIndex = this.animationIndex % this.animations.length
             gameModel.getHowler().play("btn_click");
-            gameModel.gameSignals.reels.updateAnimation.emit(this.animations[this.animationIndex]);
+            gameModel.game.signals.reels.updateAnimation.emit(this.animations[this.animationIndex]);
 
         }, this);
 

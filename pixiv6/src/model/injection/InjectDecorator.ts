@@ -2,12 +2,7 @@ import constructor from "app/model/ContructortTypes";
 import {Composer, Disposer} from "app/scenes/model/Scene";
 
 export function inject<T>(instanceToken:constructor<T>, init?:() => T, ctx?:any):any {
-    console.log("inject init to: ", instanceToken);
     return function (target:Composer & Disposer & {[key:string]:any}, propertyKey:string, descriptor:PropertyDescriptor):any {
-        console.log("inject called for ");
-        console.log(" * target", target);
-        console.log(" * propertyKey", propertyKey);
-        console.log(" * descriptor", descriptor);
         const compose = target.compose;
         const initF = target.init;
         target.compose = function () {
