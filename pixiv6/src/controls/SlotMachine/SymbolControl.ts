@@ -3,40 +3,36 @@ import SpineControl from "app/controls/SpineControl";
 
 export default class SymbolControl extends MainControl {
     private readonly spine: SpineControl;
-    private readonly maxPosY: number;
 
-    constructor(size: number, offsetY: number, maxPosY: number) {
+    constructor(
+        private readonly size: number,
+        private readonly offsetY = 0,
+    ) {
         super();
 
-        this.spine = SymbolControl.getSpine(size);
-        this.maxPosY = maxPosY;
+        this.spine = new SpineControl("symbols");
+        this.spine.setSkin(SymbolControl.getRandomSkin());
 
-        this.container.position.set(size, offsetY);
-
+        this.transformToFit();
         this.add(this.spine);
     }
 
     private static getRandomSkin() {
         const skins = [
-            "wild",
-            "scatter",
-            "low1",
-            "low2",
-            "low3",
-            "high1",
-            "high2",
-            "high3",
+            "wild", "scatter",
+            "low1", "low2", "low3",
+            "high1", "high2", "high3",
         ];
 
         return skins[Math.floor(Math.random() * skins.length)];
     }
 
-    private static getSpine(size: number) {
-        const spine = new SpineControl("symbols");
+    private transformToFit() {
+        const { container } = this.spine;
 
-        spine.setSkin(this.getRandomSkin());
-        spine.container.scale.set(size / spine.container.width);
+        container.scale.set(Math.min(this.size / container.width, this.size / container.height));
 
-        return spine;
+        container.x = Math.round((this.size - container.width) / 2);
+        container.y = this.size * this.offsetY;
     }
 }
