@@ -1,22 +1,23 @@
+import { GameSize } from "app/model/GameModel";
+
 import BaseScene from "app/scenes/BaseScene";
 import BackgroundControl from "app/controls/BackgroundControl";
 import Resources from "app/pixi/StrictResourcesHelper";
-import ReelControl from "app/controls/SlotMachine/ReelControl";
-import { Ticker } from "@pixi/ticker";
+import ReelBoxControl from "app/controls/SlotMachine/ReelBoxControl";
 
 export default class SlotMachineScene extends BaseScene {
     private readonly background = new BackgroundControl(Resources.getSingleTexture("SLOT-MASHINE_BG"));
-    private readonly reel = new ReelControl(16, 300);
+    private readonly reelBox = new ReelBoxControl(5, 16, 1500);
 
     compose() {
         this.addControl(this.background);
-        this.addControl(this.reel);
+        this.addControl(this.reelBox);
 
-        const ticker = new Ticker();
-        const start = Date.now();
-        const target = this.reel.currentPosition + 10;
+        this.reelBox.startSpinning();
+    }
 
-        ticker.add(() => this.reel.spinTo(start, target, 2000));
-        ticker.start();
+    protected onResize(gameSize: GameSize) {
+        super.onResize(gameSize);
+        this.reelBox.container.position.set(gameSize.width / 2, gameSize.height / 2);
     }
 }

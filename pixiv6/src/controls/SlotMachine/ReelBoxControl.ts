@@ -1,42 +1,68 @@
+import { Ticker } from "@pixi/ticker";
+
 import MainControl, { PivotType } from "app/controls/MainControl";
 import ReelControl from "app/controls/SlotMachine/ReelControl";
 
 export default class ReelBoxControl extends MainControl {
-    private readonly reels: ReelControl[];
+    public isSpinning = false;
 
-    constructor(reelsCount: number, reelLength: number, width: number) {
+    private readonly reels: ReelControl[] = [];
+    private readonly ticker = new Ticker();
+
+    constructor(
+        private reelsCount: number,
+        private symbolsPerReel: number,
+        private width: number,
+        private initialTime = 1000,
+        private stopDelay = 300,
+    ) {
         super();
 
-        this.reels = new Array<ReelControl>(reelsCount);
-
-        this.generateReels(reelLength, width / reelsCount);
-        this.setPivotTo(this.container, PivotType.L);
+        this.generateReels();
+        this.ticker.start();
     }
 
-    get isSpinning() {
-        return this.reels[this.reels.length - 1].isSpinning;
-    }
-
-    startSpinning = (delay = 1000) => {
-        for (let i = 0; i < this.reels.length; i++) {
-            setTimeout(this.reels[i].startSpinning, i * delay);
+    public startSpinning() {
+        if (this.isSpinning) {
+            return;
         }
+
+        const start = Date.now();
+        this.isSpinning = true;
+
+        this.reels.forEach((reel, index) => {
+            const target = reel.currentPosition + 10;
+            const time = this.initialTime + index * this.stopDelay;
+
+            const callback = () => reel.spinTo(start, target, time);
+
+            this.ticker.add(callback);
+
+            reel.onStopSpinning.add(() => {
+                this.ticker.remove(callback)
+
+                if (index === this.reels.length - 1) {
+                    this.isSpinning = false;
+                }
+            });
+        });
     }
 
-    stopSpinning = (delay = 1000) => {
-        for (let i = 0; i < this.reels.length; i++) {
-            setTimeout(this.reels[i].stopSpinning, i * delay);
-        }
+    private clearReels() {
+        this.container.removeChildren();
+        this.reels.length = 0;
     }
 
-    private generateReels(reelLength: number, reelWidth: number) {
-        for (let i = 0; i < this.reels.length; i++) {
-            const reel = new ReelControl(reelLength, reelWidth);
+    private generateReels() {
+        this.clearReels();
 
-            reel.container.position.x = reelWidth * i;
+        for (let i = 0; i < this.reelsCount; i++) {
+            const reel = new ReelControl(this.symbolsPerReel, this.width / this.reelsCount, i);
 
-            this.reels[i] = reel;
             this.add(reel);
+            this.reels.push(reel);
         }
+
+        this.setPivotTo(this.container, PivotType.C);
     }
 }
