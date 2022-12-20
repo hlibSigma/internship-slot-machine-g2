@@ -5,6 +5,8 @@ import MainControl from "app/controls/MainControl";
 import Resources from "app/pixi/StrictResourcesHelper";
 import PacmanControl from "app/controls/OS/PacmanControl";
 import { lerp, distance } from "app/helpers/math";
+import { gameSize } from "app/Main";
+import TweenMax from "gsap";
 
 export default class GhostControl extends MainControl {
     readonly sprite: AnimatedSprite;
@@ -27,16 +29,16 @@ export default class GhostControl extends MainControl {
 
         this.sprite.anchor.set(0.5);
         this.sprite.scale.set(0.8);
-
-        this.resetPosition();
         this.sprite.play();
+
+        this.animate();
+        this.resetPosition();
 
         this.container.addChild(this.sprite)
     }
 
     update(delta: number) {
         this.move(delta);
-        this.animate(delta);
         this.rotate();
     }
 
@@ -55,11 +57,12 @@ export default class GhostControl extends MainControl {
         );
     }
 
-    private animate(delta: number) {
-        const time = Date.now();
-        const sin = Math.sin(time * 0.001);
-
-        this.sprite.alpha = 0.7 + (sin * 0.3 * delta);
+    private animate(intensity = 0.8, duration = 4) {
+        TweenMax.to(this.sprite, duration, {
+            alpha: 1 - intensity,
+            yoyo: true,
+            repeat: -1,
+        });
     }
 
     private rotate() {
@@ -79,6 +82,6 @@ export default class GhostControl extends MainControl {
     }
 
     private resetPosition() {
-        this.sprite.position.set(-this.sprite.width, window.innerHeight / 2);
+        this.sprite.position.set(-this.sprite.width, gameSize.height / 2);
     }
 }

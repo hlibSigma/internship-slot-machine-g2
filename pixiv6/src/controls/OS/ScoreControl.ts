@@ -1,5 +1,5 @@
 import { Text } from "@pixi/text";
-import { Ticker } from "@pixi/ticker";
+import TweenMax from "gsap";
 
 import MainControl from "app/controls/MainControl";
 
@@ -33,22 +33,12 @@ export default class ScoreControl extends MainControl {
         this.text.text = `${this.title}: ${this.counter}`;
     }
 
-    private animate() {
-        const ticker = new Ticker();
-        let time = 0;
-
-        ticker.add((delta) => {
-            const sin = Math.sin(time);
-
-            this.text.scale.set(1 + (sin * 0.2));
-
-            if (sin <= -0.98) {
-                ticker.destroy();
-            } else {
-                time += 0.2 * delta;
-            }
+    private animate(intensity = 0.3, duration = 0.2) {
+        TweenMax.to(this.container.scale, duration, {
+            x: `+=${intensity}`,
+            y: `+=${intensity}`,
+            yoyo: true,
+            repeat: 1,
         });
-
-        ticker.start();
     }
 }
