@@ -25,6 +25,7 @@ import OS_GameScene from "app/scenes/OS/GameScene";
 import SymbolsScene from "app/scenes/SymbolsScene";
 import SlotMachineScene from "app/scenes/SlotMachineScene";
 import MS_PANEL from "./MS_Panel";
+import MS_Full_Scene from "./MS_Full_Scene";
 
 export default class ChoiceScene extends BaseScene {
     @inject(FullScreenButtonControl, ChoiceScene.createFullScreenButton)
@@ -54,6 +55,7 @@ export default class ChoiceScene extends BaseScene {
         new TextButtonControl("GPacman", {target: GPacmanScene, style: this.style,align: PivotType.TL}).name("item5_3"),
         new TextButtonControl("Slot\nMachine", {target: SlotMachineScene, style: this.style, align:PivotType.TL}).name("item6_1"),
         new TextButtonControl("Spine\nsymbols", {target: SymbolsScene, style: this.style, align:PivotType.TL}).name("item6_2"),
+        new TextButtonControl("MS_Full_Scene", {target: MS_Full_Scene, style: this.style, align:PivotType.TL}).name("item2_3"),
     ];
 
     compose():void {
