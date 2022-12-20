@@ -4,7 +4,8 @@ import constructor from "app/model/ContructortTypes";
 import sounds from "res/sounds/SOUND_FILE.soundmap.json";
 import {Howl} from 'howler';
 import dependencyManager from "app/model/injection/InjectDecorator";
-import {TInitResponse} from "app/model/TGameData";
+import {TFullUserData, TInitResponse, TResponse, TSpinResponse} from "app/server/fruit/service/typing";
+import ServerCommunicator from "app/server/fruit/ServerCommunicator";
 
 type InjectionType<T extends MainControl> = Function & {prototype:T};
 
@@ -22,6 +23,11 @@ export class GameModel {
     public readonly updateLayout:Signal<GameSize> = new Signal<GameSize>();
     public readonly pauseGame:Signal<{pause:boolean}> = new Signal<{pause:boolean}>();
     private howler:Howl = <any>{};
+    public readonly game = {
+        fruit: {
+            serverCommunicator: new ServerCommunicator("https://us-central1-internship-slot-backend.cloudfunctions.net/app/"),
+        }
+    };
     //todo: it should be done by a server response [#17];
     mainGameInfo: TInitGameData & {reels:{amount:number, height:number}} = {
         reels:{
@@ -31,7 +37,6 @@ export class GameModel {
         bets:[],
         autoPlays:[],
         lines:[],
-        stakes:[],
         strips:[],
         symbols:[],
         user:{
@@ -51,6 +56,13 @@ export class GameModel {
             updateSkin: new Signal<string>(),
             updateAnimation: new Signal<string>(),
         },
+        data: {
+            login: new Signal<TInitResponse>(),
+            spin: new Signal<TSpinResponse>(),
+            users: new Signal<TFullUserData[]>(),
+            stopReel: new Signal<TResponse>(),
+            buyAmount: new Signal<TResponse>(),
+        }
     };
 
     getHowler():Howl {
