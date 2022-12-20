@@ -1,23 +1,25 @@
 import {Container, DisplayObject} from "@pixi/display";
 
 export default abstract class MainControl {
-    public readonly container:Container;
+    public static _UID: number = 1;
+    public readonly uid: number = MainControl._UID++;
+    public readonly container: Container;
 
-    protected constructor(container?:Container) {
+    protected constructor(container?: Container) {
         this.container = container ?? new Container();
         this.container.on("added", this.init, this);
         this.container.on("removed", this.dispose, this);
     }
 
-    add(control:MainControl):void {
+    add(control: MainControl): void {
         this.container.addChild(control.container);
     }
 
-    remove(control:MainControl):void {
+    remove(control: MainControl): void {
         this.container.removeChild(control.container);
     }
 
-    setPivotTo(displayObject:DisplayObject & {width:number, height:number} = this.container, type:PivotType = PivotType.C) {
+    setPivotTo(displayObject: DisplayObject & {width: number, height: number} = this.container, type: PivotType = PivotType.C) {
         let scaleX = displayObject.scale.x;
         displayObject.scale.set(1);
         let width = displayObject.width;
@@ -59,11 +61,12 @@ export default abstract class MainControl {
     init() {
 
     }
+
     dispose() {
 
     }
 
-    name(name:string):this {
+    name(name: string): this {
         this.container.name = name;
         return this;
     }
