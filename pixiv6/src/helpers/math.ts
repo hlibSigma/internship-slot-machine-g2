@@ -59,6 +59,14 @@ export function lerp(value1: number, value2: number, amount: number) {
     return (1 - amount) * value1 + amount * value2;
 }
 
+export function interpolate(from: number, to: number, time: number) {
+    return from * (1 - time) + to * time;
+}
+
+export function backout(amount: number, time: number) {
+    return --time * time * ((amount + 1) * time + amount) + 1;
+}
+
 export function getRandomSign() {
     return Math.random() >= 0.5 ? 1 : -1;
 }
