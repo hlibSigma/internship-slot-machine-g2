@@ -6,6 +6,12 @@ import {inject} from "app/model/injection/InjectDecorator";
 import SpineStateListenerFactory from "app/helpers/spine/SpineStateListenerFactory";
 import promiseHelper from "app/helpers/promise/ResolvablePromise";
 
+export type SpinePlayConfig = {
+    trackIndex: number,
+    loop: boolean,
+    loopsLimit: number,
+    timeScale:number
+}
 export default class SpineControl extends MainControl {
     public readonly spine: Spine;
     @inject(Ticker)
@@ -20,10 +26,11 @@ export default class SpineControl extends MainControl {
         this.spine.skeleton.setSkinByName(name);
     }
 
-    play(name: string, data?: {trackIndex?: number, loop?: boolean, loopsLimit?: number}) {
+    play(name: string, data?: Partial<SpinePlayConfig>) {
         data = data ?? {};
         data.trackIndex = data?.trackIndex ?? 0;
         data.loop = data?.loop ?? false;
+        data.timeScale = data?.timeScale ?? 1;
         let loopsLimit = data?.loopsLimit ?? -1;
         const resolvablePromise = promiseHelper.getResolvablePromise<void>();
         const trackEntry = this.spine.state.setAnimation(
@@ -37,6 +44,7 @@ export default class SpineControl extends MainControl {
                 console.log(`Animation[${this.uid}] ${name} end, loop(${data?.loop})`)
             }
         });
+        trackEntry.timeScale = data.timeScale;
         this.ticker.remove(this.update, this);
         this.ticker.add(this.update, this);
         return resolvablePromise;
