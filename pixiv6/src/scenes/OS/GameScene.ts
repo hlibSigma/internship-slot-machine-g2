@@ -8,12 +8,12 @@ import PacmanControl from "app/controls/OS/PacmanControl";
 import DotControl from "app/controls/OS/DotControl";
 import ScoreControl from "app/controls/OS/ScoreControl";
 import GhostControl from "app/controls/OS/GhostControl";
-import ChoiceScene from "app/scenes/ChoiceScene";
-import WinScene from "app/scenes/OS/WinScene";
+import FinalScene from "app/scenes/OS/FinalScene";
 import { GameSize } from "app/model/GameModel";
+import { gameSize } from "app/Main";
 
 export default class GameScene extends BaseScene {
-    private readonly background = new BackgroundControl(Resources.getSingleTexture("OS_GAME-BG"));
+    private readonly background = new BackgroundControl(Resources.getSingleTexture("OS_GAME-BG"), 100);
     private readonly pacman = new PacmanControl();
     private readonly dots: DotControl[] = [];
     private readonly score = new ScoreControl();
@@ -37,7 +37,6 @@ export default class GameScene extends BaseScene {
         this.ghost.update(delta);
         this.checkGhostCollision();
 
-        this.dots.forEach(dot => dot.animate(delta));
         this.checkDotsCollision();
     }
 
@@ -51,21 +50,23 @@ export default class GameScene extends BaseScene {
     }
 
     private win() {
-        this.sceneManager.navigate(WinScene);
+        FinalScene.setBackgroundTexture("OS_WIN-BG");
+        this.sceneManager.navigate(FinalScene);
     }
 
     private lose() {
-        this.sceneManager.navigate(ChoiceScene);
+        FinalScene.setBackgroundTexture("OS_LOSE-BG");
+        this.sceneManager.navigate(FinalScene);
     }
 
     private generateDots() {
         const maxPos = {
-            x: window.innerWidth - this.padding,
-            y: window.innerHeight - this.padding,
+            x: gameSize.width - this.padding,
+            y: gameSize.height - this.padding,
         };
 
-        for (let x = this.padding; x < maxPos.x; x += this.padding) {
-            for (let y = this.padding; y < maxPos.y; y += this.padding) {
+        for (let x = this.padding; x <= maxPos.x; x += this.padding) {
+            for (let y = this.padding; y <= maxPos.y; y += this.padding) {
                 const dot = new DotControl(new Point(x, y));
 
                 this.dots.push(dot);
@@ -80,7 +81,7 @@ export default class GameScene extends BaseScene {
                 this.pacman.grow();
 
                 this.score.increment();
-                // this.scenes.game.background.shake();
+                this.background.shake();
 
                 this.scene.removeChild(dot.container);
                 this.dots.splice(this.dots.indexOf(dot), 1);

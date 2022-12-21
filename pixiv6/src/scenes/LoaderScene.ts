@@ -37,6 +37,7 @@ export default class LoaderScene extends BaseScene {
         Loader.shared.add('OS_ATLAS', 'assets/atlases/OS_atlas.json');
         Loader.shared.add('OS_GAME-BG', 'assets/images/OS_game-bg.jpg');
         Loader.shared.add('OS_WIN-BG', 'assets/images/OS_win-bg.png');
+        Loader.shared.add('OS_LOSE-BG', 'assets/images/OS_lose-bg.jpg');
         Loader.shared.add({name: "PressStart2P", url: "./assets/fonts/PressStart2P-Regular.ttf"});
         Loader.shared.add('UI', 'assets/atlases/ui.json');
         Loader.shared.add('PACMAN', 'assets/atlases/pacman2.json');

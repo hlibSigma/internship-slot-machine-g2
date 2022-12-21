@@ -3,6 +3,7 @@ import { AnimatedSprite } from "@pixi/sprite-animated";
 import MainControl from "../MainControl";
 import Resources from "app/pixi/StrictResourcesHelper";
 import { Vector } from "app/helpers/math";
+import { gameSize } from "app/Main";
 
 enum Key {
     Up = "ArrowUp",
@@ -35,8 +36,8 @@ export default class PacmanControl extends MainControl {
         this.sprite.scale.set(0.65);
 
         this.sprite.position.set(
-            window.innerWidth / 2,
-            window.innerHeight / 2
+            gameSize.width / 2,
+            gameSize.height / 2
         );
 
         this.sprite.play();
@@ -92,7 +93,7 @@ export default class PacmanControl extends MainControl {
     }
 
     private move(delta: number) {
-        const { innerWidth, innerHeight } = window;
+        const { width, height } = gameSize;
         const { position } = this.sprite;
 
         position.x += this.vector.x * this.moveSpeed * delta;
@@ -101,8 +102,8 @@ export default class PacmanControl extends MainControl {
         this.vector.mult(0.96);
 
         position.set(
-            (innerWidth + position.x) % innerWidth,
-            (innerHeight + position.y) % innerHeight
+            (width + position.x) % width,
+            (height + position.y) % height
         );
     }
 
