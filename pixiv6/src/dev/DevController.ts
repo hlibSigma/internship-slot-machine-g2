@@ -17,6 +17,7 @@ export default class DevController {
         this.setupStats();
         const gui = new GUI();
         this.setupGeneralHooks(gui);
+        this.setupSlotMachineHooks(gui);
         this.setupPacmanHooks(gui);
         this.setupSounds(gui);
         gui.add({
@@ -50,6 +51,19 @@ export default class DevController {
                 }
             }, "show layouts");
         }, "dev tools");
+    }
+
+    private setupSlotMachineHooks(gui: GUI) {
+        const SlotMachineGui = gui.addFolder("Slot Machine");
+
+        SlotMachineGui.add({
+            startSpinning: () => gameModel.startSpinning.emit(),
+        }, "startSpinning");
+
+        for (const hook of gameModel.reelBoxOnChangeHooks) {
+            SlotMachineGui.add(hook.target, hook.propName)
+                          .onChange(value => hook.signal.emit(value));
+        }
     }
 
     private setupPacmanHooks(gui: GUI) {
