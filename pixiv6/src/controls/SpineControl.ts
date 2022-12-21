@@ -36,12 +36,12 @@ export default class SpineControl extends MainControl {
         const trackEntry = this.spine.state.setAnimation(
             data.trackIndex, name, data.loop
         );
-        console.log(`Animation[${this.uid}] ${name} start, loop(${data?.loop})`)
+        // console.log(`Animation[${this.uid}] ${name} start, loop(${data?.loop})`)
         trackEntry.listener = SpineStateListenerFactory.complete(() => {
             if (loopsLimit-- < 0) {
                 this.ticker.remove(this.update, this);
                 resolvablePromise.resolve();
-                console.log(`Animation[${this.uid}] ${name} end, loop(${data?.loop})`)
+                // console.log(`Animation[${this.uid}] ${name} end, loop(${data?.loop})`)
             }
         });
         trackEntry.timeScale = data.timeScale;
