@@ -67,18 +67,17 @@ export default class ButtonControl extends MainControl {
 
     enable() {
         this.button.alpha = 1;
-        this.button.filters = [];
-        this.button.interactive = true;
-        this.button.buttonMode = true;
+        this.container.filters = [];
+        this.container.interactive = true;
+        this.container.buttonMode = true;
     }
 
     disable() {
         if (this.button.alpha === 1) {
-            this.button.filters = [this.sepiaColorFilter];
-            this.button.interactive = false;
-            this.button.buttonMode = false;
-            this.container.filters = [...this.additionalFilters];
-            this.button.alpha += 1;
+            this.container.interactive = false;
+            this.container.buttonMode = false;
+            this.container.filters = [this.sepiaColorFilter,...this.additionalFilters];
+            this.button.alpha = 0.5;
         }
     }
 

@@ -2,31 +2,15 @@ import MainControl from "app/controls/MainControl";
 import {Container} from "@pixi/display";
 import gameModel from "app/model/GameModel";
 import SpineControl from "app/controls/SpineControl";
-import {promiseDelay} from "app/helpers/TimeHelper";
 
 export default class ReelControl extends MainControl {
-    private skinIndex = 0;
-    private readonly skins = [
-        "wild",
-        "scatter",
-        "low1",
-        "low2",
-        "low3",
-        "high1",
-        "high2",
-        "high3",
-    ];
-    private animationIndex = 0;
-    private readonly animations = [
-        "idle",
-        "win",
-        "land",
-        "dim",
-        "undim",
-    ];
+
     private readonly symbols: SpineControl[] = [];
 
-    constructor(protected strips: number[][]) {
+    constructor(
+        protected readonly reelIndex: number,
+        protected readonly strips: number[]
+    ) {
         super(new Container());
     }
 
@@ -39,10 +23,9 @@ export default class ReelControl extends MainControl {
             let spriteControl = this.getSpineSymbol(0, 240 * i + 100);
             this.add(spriteControl);
             spriteControl.container.position.y = 240 * i + 100;
-            spriteControl.setSkin(this.skins[this.skinIndex])
-            spriteControl.play(this.animations[this.animationIndex], {loop: true})
             this.symbols.push(spriteControl);
         }
+        this.stop(mainGameInfo.userStats.reelStops[this.reelIndex]);
     }
 
     protected getSpineSymbol(x: number = 0, y: number = 0): SpineControl {
@@ -61,9 +44,23 @@ export default class ReelControl extends MainControl {
 
     async spin() {
         await Promise.all(this.symbols.map(async symbol => {
-            symbol.play("dim");
-            await promiseDelay(2.5 * 1000);
-            symbol.play("undim");
+            await symbol.play("dim", {loop: true, loopsLimit: 4});
+        }));
+    }
+
+    async stop(stopIndex: number) {
+        const symbols = this.strips.concat(this.strips).slice(stopIndex, stopIndex + 3);
+        await Promise.all(this.symbols.map(async (symbol, index) => {
+            const symbolId = symbols[index];
+            const symbolData = gameModel.mainGameInfo.symbols.find(value => value.id == symbolId);
+            if (!symbolData) {
+                throw `no symbol data for symbolId: ${symbolId}`;
+            }
+            const timeScale = 3 - this.reelIndex * 0.35;
+            await symbol.play("win", {loop: false, timeScale});
+            symbol.setSkin(symbolData.name.toLowerCase());
+            await symbol.play("undim");
+            symbol.play("idle", {loop: true});
         }));
     }
 }

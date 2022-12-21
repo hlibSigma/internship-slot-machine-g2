@@ -3,6 +3,7 @@ import SpinBtnControl from "app/controls/button/SpinBtnControl";
 import LayoutManager, {PartialLayout} from "app/layoutManager/LayoutManager";
 import {inject} from "app/model/injection/InjectDecorator";
 import gameModel from "app/model/GameModel";
+import {promiseDelay} from "app/helpers/TimeHelper";
 const layout:PartialLayout = {
     name: "body",
     width:"80%",
@@ -49,9 +50,11 @@ export default class BetPanelScene extends BaseScene {
         this.spinBtnControl.enable();
     }
 
-    private onSpinRequest() {
+    private async onSpinRequest() {
         this.spinBtnControl.disable();
         gameModel.game.signals.reels.spin.emit();
-        gameModel.game.fruit.serverCommunicator.spin(this.betId);
+        const tSpinResponse = await gameModel.game.fruit.serverCommunicator.spin(this.betId);
+        await promiseDelay(1000);
+        gameModel.game.signals.reels.stop.emit(tSpinResponse.userStats.reelStops);
     }
 }

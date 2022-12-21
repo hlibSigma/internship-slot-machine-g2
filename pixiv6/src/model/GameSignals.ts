@@ -6,8 +6,10 @@ export default class GameSignals {
         updateSkin: new Signal<string>(),
         updateAnimation: new Signal<string>(),
         spin: new Signal<void>(),
+        stop: new Signal<number[]>(),
     };
     public readonly spinComplete = new Signal<void>();
+    public readonly spinStarted = new Signal<void>();
     public readonly data = {
         login: new Signal<TInitResponse>(),
         spin: new Signal<TSpinResponse>(),
