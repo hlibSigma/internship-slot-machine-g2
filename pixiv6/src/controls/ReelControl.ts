@@ -4,25 +4,7 @@ import gameModel from "app/model/GameModel";
 import SpineControl from "app/controls/SpineControl";
 
 export default class ReelControl extends MainControl {
-    private skinIndex = 0;
-    private readonly skins = [
-        "wild",
-        "scatter",
-        "low1",
-        "low2",
-        "low3",
-        "high1",
-        "high2",
-        "high3",
-    ];
-    private animationIndex = 0;
-    private readonly animations = [
-        "idle",
-        "win",
-        "land",
-        "dim",
-        "undim",
-    ];
+
     private readonly symbols: SpineControl[] = [];
 
     constructor(
