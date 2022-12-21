@@ -5,6 +5,7 @@ import Signal from "app/helpers/signals/signal/Signal";
 import {Container} from "@pixi/display";
 import {Filter, Texture} from "@pixi/core";
 import {Sprite} from "@pixi/sprite";
+import StrictResourcesHelper from "app/pixi/StrictResourcesHelper";
 
 export type ButtonControlOptions = {hoverColor?: number, align?: PivotType, target?: any}
 export default class ButtonControl extends MainControl {
@@ -16,12 +17,15 @@ export default class ButtonControl extends MainControl {
     private readonly additionalFilters: Array<Filter> = [];
     private readonly glowFilter: Filter;
 
-    constructor(texture: Texture | Container, opt?: ButtonControlOptions) {
+    constructor(texture: Texture | Container | string, opt?: ButtonControlOptions) {
         super();
         opt = opt ? opt : {};
         opt.hoverColor = opt.hoverColor === undefined ? 0xffffff : opt.hoverColor;
         opt.align = opt.align === undefined ? PivotType.TL : opt.align;
         this.target = opt.target;
+        if (typeof texture == "string") {
+            texture = StrictResourcesHelper.getSomeTexture(texture);
+        }
         this.button = texture instanceof Container ? texture : new Sprite(<Texture>texture);
         this.button.interactive = true;
         this.button.buttonMode = true;
@@ -76,7 +80,7 @@ export default class ButtonControl extends MainControl {
         if (this.button.alpha === 1) {
             this.container.interactive = false;
             this.container.buttonMode = false;
-            this.container.filters = [this.sepiaColorFilter,...this.additionalFilters];
+            this.container.filters = [this.sepiaColorFilter, ...this.additionalFilters];
             this.button.alpha = 0.5;
         }
     }
