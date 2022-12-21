@@ -16,6 +16,6 @@ export default class SlotMachineScene extends BaseScene {
 
     protected onResize(gameSize: GameSize) {
         super.onResize(gameSize);
-        this.reelBox.container.position.set(gameSize.width / 2, gameSize.height / 2);
+        this.reelBox.container.position.copyFrom(gameSize.centerPosition);
     }
 }
