@@ -37,10 +37,14 @@ export default class SymbolsScene extends BaseScene {
     ];
 
 
+    private backgroundSceneManager = new SceneManager(this.app, true);
+    private reelSceneManager = new SceneManager(this.app, true);
+    private betPanelSceneManager = new SceneManager(this.app, true);
+
     async compose() {
-        new SceneManager(this.app, true).navigate(BackgroundScene);
-        new SceneManager(this.app, true).navigate(ReelScene);
-        new SceneManager(this.app, true).navigate(BetPanelScene);
+        this.backgroundSceneManager.navigate(BackgroundScene);
+        this.reelSceneManager.navigate(ReelScene);
+        this.betPanelSceneManager.navigate(BetPanelScene);
         await gameModel.ready;
         this.textButtonControl.onClick.add(() => {
             gameModel.getHowler().play("btn_click");
@@ -86,6 +90,13 @@ export default class SymbolsScene extends BaseScene {
             gameSize.width * .3,
             gameSize.height * .1
         );
+    }
+
+    dispose() {
+        this.backgroundSceneManager.dispose();
+        this.reelSceneManager.dispose();
+        this.betPanelSceneManager.dispose();
+        super.dispose();
     }
 
 }
