@@ -1,9 +1,9 @@
 import BaseScene from "app/scenes/BaseScene";
 import SpinBtnControl from "app/controls/button/SpinBtnControl";
-import LayoutManager, {PartialLayout} from "app/layoutManager/LayoutManager";
-import {inject} from "app/model/injection/InjectDecorator";
-import gameModel from "app/model/GameModel";
-import {promiseDelay} from "app/helpers/TimeHelper";
+import LayoutManager, { PartialLayout } from "app/layoutManager/LayoutManager";
+import { inject } from "app/model/injection/InjectDecorator";
+import gameModel, { GameSize } from "app/model/GameModel";
+import { promiseDelay } from "app/helpers/TimeHelper";
 import PlusBtnControl from "app/controls/button/PlusBtnControl";
 import MinusBtnControl from "app/controls/button/MinusBtnControl";
 import SlotMashineTextControl from "app/controls/SlotMashineTextControl";
@@ -12,7 +12,7 @@ import SlotMashineBalanceControl from "app/controls/SlotMachineBalanceControl";
 
 const layout: PartialLayout = {
     name: "body",
-    width: "60%",
+    width: "70%",
     height: "20%",
     top: "70%",
     left: "20%",
@@ -59,8 +59,6 @@ const layout: PartialLayout = {
 export default class BetPanelScene extends BaseScene {
     @inject(LayoutManager)
     private layoutManager: LayoutManager = <any>{};
-    private currentWidth: number = 0;
-    private currentHeight: number = 0;
     private betId: number = 1;
     private spinBtnControl: SpinBtnControl = new SpinBtnControl();
     private plusBtnControl: PlusBtnControl = new PlusBtnControl();
@@ -122,5 +120,4 @@ export default class BetPanelScene extends BaseScene {
         await promiseDelay(500);
         gameModel.game.signals.reels.stop.emit(tSpinResponse.userStats.reelStops);
     }
-
 }
