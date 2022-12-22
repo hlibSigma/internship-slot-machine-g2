@@ -8,6 +8,9 @@ import PlusBtnControl from "app/controls/button/PlusBtnControl";
 import MinusBtnControl from "app/controls/button/MinusBtnControl";
 import SlotMashineTextControl from "app/controls/SlotMashineTextControl";
 import SlotMashineBalanceControl from "app/controls/SlotMachineBalanceControl";
+import SlotMashineTotalBetControl from "app/controls/SlotMachineTotalBetControl";
+import SlotMashineWinControl from "app/controls/SlotMachineWinControl";
+
 
 
 const layout: PartialLayout = {
@@ -17,6 +20,13 @@ const layout: PartialLayout = {
     top: "70%",
     left: "20%",
     layouts: [
+        {
+            name: "total-bet_label",
+            height: "40%",
+            scaleBy: "height",
+            top: "90%",
+            align: "l",
+        },
         {
             name: "minus_btn",
             height: "40%",
@@ -37,6 +47,13 @@ const layout: PartialLayout = {
             scaleBy: "height",
             top: "90%",
             align: "l",
+        },
+        {
+            name: "win_label",
+            height: "40%",
+            scaleBy: "height",
+            top: "90%",
+            align: "c",
         },
         {
             name: "balance_label",
@@ -65,6 +82,8 @@ export default class BetPanelScene extends BaseScene {
     private minusBtnControl: MinusBtnControl = new MinusBtnControl();
     private betControl = new SlotMashineTextControl("BET");
     private BalanceLabelControl: SlotMashineBalanceControl = new SlotMashineBalanceControl("BALANCE");
+    private TotalBetControl: SlotMashineTotalBetControl = new SlotMashineTotalBetControl("TOTAL BET");
+    private WinControl: SlotMashineWinControl = new SlotMashineWinControl("WIN");
 
 
     async compose() {
@@ -73,11 +92,15 @@ export default class BetPanelScene extends BaseScene {
         const minusBtnControl = this.minusBtnControl;
         const betControl = this.betControl;
         const BalanceLabelControl = this.BalanceLabelControl;
+        const TotalBetControl = this.TotalBetControl;
+        const WinControl = this.WinControl;
         this.addControl(spinBtnControl.name("spin_btn"));
         this.addControl(plusBtnControl.name("plus_btn"));
         this.addControl(minusBtnControl.name("minus_btn"));
         this.addControl(betControl.name("bet_label"));
         this.addControl(BalanceLabelControl.name("balance_label"));
+        this.addControl(TotalBetControl.name("total-bet_label"));
+        this.addControl(WinControl.name("win_label"));
         spinBtnControl.disable();
         await gameModel.ready;
         spinBtnControl.enable();
