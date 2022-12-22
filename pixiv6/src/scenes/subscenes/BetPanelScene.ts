@@ -81,9 +81,9 @@ export default class BetPanelScene extends BaseScene {
     private plusBtnControl: PlusBtnControl = new PlusBtnControl();
     private minusBtnControl: MinusBtnControl = new MinusBtnControl();
     private betControl = new SlotMashineTextControl("BET");
-    private BalanceLabelControl: SlotMashineBalanceControl = new SlotMashineBalanceControl("BALANCE");
-    private TotalBetControl: SlotMashineTotalBetControl = new SlotMashineTotalBetControl("TOTAL BET");
-    private WinControl: SlotMashineWinControl = new SlotMashineWinControl("WIN");
+    private balanceLabelControl: SlotMashineBalanceControl = new SlotMashineBalanceControl("BALANCE");
+    private totalBetControl: SlotMashineTotalBetControl = new SlotMashineTotalBetControl("TOTAL BET");
+    private winControl: SlotMashineWinControl = new SlotMashineWinControl("WIN");
 
 
     async compose() {
@@ -91,16 +91,16 @@ export default class BetPanelScene extends BaseScene {
         const plusBtnControl = this.plusBtnControl;
         const minusBtnControl = this.minusBtnControl;
         const betControl = this.betControl;
-        const BalanceLabelControl = this.BalanceLabelControl;
-        const TotalBetControl = this.TotalBetControl;
-        const WinControl = this.WinControl;
+        const balanceLabelControl = this.balanceLabelControl;
+        const totalBetControl = this.totalBetControl;
+        const winControl = this.winControl;
         this.addControl(spinBtnControl.name("spin_btn"));
         this.addControl(plusBtnControl.name("plus_btn"));
         this.addControl(minusBtnControl.name("minus_btn"));
         this.addControl(betControl.name("bet_label"));
-        this.addControl(BalanceLabelControl.name("balance_label"));
-        this.addControl(TotalBetControl.name("total-bet_label"));
-        this.addControl(WinControl.name("win_label"));
+        this.addControl(balanceLabelControl.name("balance_label"));
+        this.addControl(totalBetControl.name("total-bet_label"));
+        this.addControl(winControl.name("win_label"));
         spinBtnControl.disable();
         await gameModel.ready;
         spinBtnControl.enable();
@@ -116,6 +116,10 @@ export default class BetPanelScene extends BaseScene {
             gameModel.getHowler().play("custom-button");
             betControl.decrement();
         }, this);
+        spinBtnControl.enable();
+        spinBtnControl.onClick.add(this.onSpinRequest, this);
+        gameModel.game.signals.spinComplete.add(this.onSpinComplete, this);
+        gameModel.game.signals.betChanged.add(this.onBetChanged, this);
         gameModel.game.signals.spinComplete.add(this.onSpinComplete, this);
         gameModel.game.signals.betChanged.add(this.onBetChanged, this);
     }
