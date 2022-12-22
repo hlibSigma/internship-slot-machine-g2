@@ -8,6 +8,7 @@ export default class GameSignals {
         spin: new Signal<void>(),
         stop: new Signal<number[]>(),
     };
+    public readonly betChanged = new Signal<number>();
     public readonly spinComplete = new Signal<void>();
     public readonly spinStarted = new Signal<void>();
     public readonly data = {
