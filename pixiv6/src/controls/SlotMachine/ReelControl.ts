@@ -2,6 +2,7 @@ import MainControl from "app/controls/MainControl";
 import SymbolControl from "app/controls/SlotMachine/SymbolControl";
 import Signal from "app/helpers/signals/signal/Signal";
 import { backout, interpolate } from "app/helpers/math";
+import gameModel from "app/model/GameModel";
 
 export default class ReelControl extends MainControl {
     public readonly onStopSpinning = new Signal<void>();
@@ -12,13 +13,12 @@ export default class ReelControl extends MainControl {
     private readonly symbols: SymbolControl[] = [];
 
     constructor(
-        private readonly symbolsCount: number,
         private readonly width: number,
-        private readonly offsetX = 0,
+        private readonly reelIndex = 0,
     ) {
         super();
 
-        this.container.x = width / 2 + width * offsetX;
+        this.container.x = width / 2 + width * reelIndex;
 
         this.generateSymbols();
     }
@@ -28,23 +28,36 @@ export default class ReelControl extends MainControl {
         const phase = Math.min(1, (now - start) / duration);
 
         this.symbols.forEach((symbol, index) => {
-            symbol.spinTo(this.currentPosition + index, this.symbols.length)
-        })
+            symbol.spinTo(this.currentPosition + index, this.symbols.length);
+        });
 
         this.currentPosition = interpolate(this.previousPosition, target, backout(0.4, phase));
 
         if (phase === 1) {
-            this.currentPosition = this.previousPosition = target;
             this.onStopSpinning.emit();
         }
     }
 
-    private generateSymbols() {
-        for (let i = 0; i < this.symbolsCount; i++) {
-            const symbol = new SymbolControl(this.width, i);
+    private createSymbol(index: number, skin: string) {
+        const symbol = new SymbolControl(skin, this.width, index);
 
-            this.add(symbol);
-            this.symbols.push(symbol);
+        this.add(symbol);
+        this.symbols.push(symbol);
+    }
+
+    private generateSymbols() {
+        const { strips, symbols } = gameModel.mainGameInfo;
+        const symbolIds = strips[this.reelIndex];
+
+        for (let i = 0; i < symbolIds.length; i++) {
+            const symbolId = symbolIds[i];
+            const symbolData = symbols.find(value => value.id == symbolId);
+
+            if (!symbolData) {
+                throw `No symbol data for symbol with ${symbolId} id!`;
+            }
+
+            this.createSymbol(i, symbolData.name.toLowerCase());
         }
     }
 }

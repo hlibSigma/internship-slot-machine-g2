@@ -1,20 +1,17 @@
 import { GameSize } from "app/model/GameModel";
 
 import BaseScene from "app/scenes/BaseScene";
-import BackgroundControl from "app/controls/BackgroundControl";
-import Resources from "app/pixi/StrictResourcesHelper";
 import ReelBoxControl from "app/controls/SlotMachine/ReelBoxControl";
 import TextButtonControl from "app/controls/button/TextButtonControl";
 import gameModel from "app/model/GameModel";
 import ChoiceScene from "app/scenes/ChoiceScene";
 import SceneManager from "app/scenes/SceneManager";
 import SlotMachineBackgroundScene from "app/scenes/SlotMachineBackgroundScene";
-import ReelScene from "app/scenes/subscenes/ReelScene";
 import BetPanelScene from "app/scenes/subscenes/BetPanelScene";
 
 export default class SlotMachineScene extends BaseScene {
     private readonly backgroundSceneManager = new SceneManager(this.app, true);
-    private readonly reelBox = new ReelBoxControl(5, 16, 1500);
+    private readonly reelBox = new ReelBoxControl(1500);
     private readonly textButtonControl = new TextButtonControl("Back");
     private readonly betPanelSceneManager = new SceneManager(this.app, true);
 
@@ -28,11 +25,14 @@ export default class SlotMachineScene extends BaseScene {
             gameModel.getHowler().play("btn_click");
             this.sceneManager.navigate(ChoiceScene);
         }, this);
+        const reelSignals = gameModel.game.signals.reels;
+        reelSignals.spin.add(this.startSpin, this);
+        reelSignals.stop.add(this.stopSpinOn, this);
     }
+
     activate():void {
         super.activate();
         this.addControl(this.textButtonControl);
-
     }
 
     dispose() {
@@ -45,4 +45,15 @@ export default class SlotMachineScene extends BaseScene {
         super.onResize(gameSize);
         this.reelBox.container.position.copyFrom(gameSize.centerPosition);
     }
+
+    private async startSpin() {
+        await this.reelBox.startSpin();
+        gameModel.game.signals.spinStarted.emit();
+    }
+
+    private async stopSpinOn(reelStops: number[]) {
+        await this.reelBox.stopSpinOn(reelStops);
+        gameModel.game.signals.spinComplete.emit();
+    }
+
 }
