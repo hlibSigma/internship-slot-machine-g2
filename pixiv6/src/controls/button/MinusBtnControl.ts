@@ -10,7 +10,7 @@ export default class MinusBtnControl extends ButtonControl {
 
     init() {
         super.init();
-        this.add(new SpriteControl("minus.png", {x: 0.5, y: 0.5}));
+        this.add(new SpriteControl("minus.png", {x: 1, y: 0.5}));
     }
 
     dispose() {
