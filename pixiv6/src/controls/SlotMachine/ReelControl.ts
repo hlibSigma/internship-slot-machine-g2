@@ -13,63 +13,51 @@ export default class ReelControl extends MainControl {
     private readonly symbols: SymbolControl[] = [];
 
     constructor(
-        private readonly symbolsCount: number,
         private readonly width: number,
-        private readonly offsetX = 0,
+        private readonly reelIndex = 0,
     ) {
         super();
 
-        this.container.x = width / 2 + width * offsetX;
-        this.container.y = symbolsCount % 2 === 0 ? 0 : width / 2;
+        this.container.x = width / 2 + width * reelIndex;
 
-        this.generateSymbols(0);
+        this.generateSymbols();
     }
 
-    public async spinTo(start: number, target: number, duration: number) {
+    public spinTo(start: number, target: number, duration: number) {
         const now = Date.now();
         const phase = Math.min(1, (now - start) / duration);
 
         this.symbols.forEach((symbol, index) => {
-            symbol.spinTo(this.currentPosition + index, this.symbolsCount);
+            symbol.spinTo(this.currentPosition + index, this.symbols.length);
         });
 
         this.currentPosition = interpolate(this.previousPosition, target, backout(0.4, phase));
 
         if (phase === 1) {
-            this.currentPosition = this.previousPosition = target;
             this.onStopSpinning.emit();
-
-            this.generateSymbols(target % this.symbolsCount);
         }
     }
 
-    private setSymbolSkin(index: number, skin: string) {
-        let symbol = this.symbols[index];
+    private createSymbol(index: number, skin: string) {
+        const symbol = new SymbolControl(skin, this.width, index);
 
-        if (symbol) {
-            symbol.spine.setSkin(skin);
-        }
-        else {
-            symbol = new SymbolControl(skin, this.width, index);
-
-            this.add(symbol);
-            this.symbols.push(symbol);
-        }
+        this.add(symbol);
+        this.symbols.push(symbol);
     }
 
-    private generateSymbols(stopIndex: number) {
-        const strips = gameModel.mainGameInfo.strips[this.offsetX];
-        const symbols = strips.concat(strips).slice(stopIndex, stopIndex + this.symbolsCount);
+    private generateSymbols() {
+        const { strips, symbols } = gameModel.mainGameInfo;
+        const symbolIds = strips[this.reelIndex];
 
-        for (let i = 0; i < this.symbolsCount; i++) {
-            const symbolId = symbols[i];
-            const symbolData = gameModel.mainGameInfo.symbols.find(value => value.id == symbolId);
+        for (let i = 0; i < symbolIds.length; i++) {
+            const symbolId = symbolIds[i];
+            const symbolData = symbols.find(value => value.id == symbolId);
 
             if (!symbolData) {
                 throw `No symbol data for symbol with ${symbolId} id!`;
             }
 
-            this.setSymbolSkin(i, symbolData.name.toLowerCase());
+            this.createSymbol(i, symbolData.name.toLowerCase());
         }
     }
 }

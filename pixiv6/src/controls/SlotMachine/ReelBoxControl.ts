@@ -13,7 +13,6 @@ export default class ReelBoxControl extends MainControl {
     private readonly mask = new Graphics();
 
     private reelsCount = 0;
-    private symbolsPerReel = 0;
 
     private get reelWidth() {
         return this.width / this.reelsCount;
@@ -35,28 +34,31 @@ export default class ReelBoxControl extends MainControl {
         super.init();
 
         await gameModel.ready;
-        const reelsInfo = gameModel.mainGameInfo.reels;
-
-        this.reelsCount = reelsInfo.amount;
-        this.symbolsPerReel = reelsInfo.height;
+        this.reelsCount = gameModel.mainGameInfo.strips.length;
 
         this.generateReels();
         this.applyMask();
         this.setupHooks();
 
+        gameModel.game.signals.reels.stop.add(this.spinTo, this);
+
         this.ticker.start();
     }
 
-    public startSpinning() {
+    public async startSpinning() {
         if (this.isSpinning) {
             return;
         }
 
-        const start = Date.now();
         this.isSpinning = true;
+    }
+
+    private spinTo(reelStops: number[]) {
+        const start = Date.now();
 
         this.reels.forEach((reel, index) => {
-            const target = reel.currentPosition + 10;
+            const stopIndex = reelStops[index]
+            const target = reel.currentPosition + (this.reels.length - reel.currentPosition) + stopIndex;
             const time = this.initialTime + index * this.stopDelay;
 
             const callback = () => reel.spinTo(start, target, time);
@@ -64,10 +66,11 @@ export default class ReelBoxControl extends MainControl {
             this.ticker.add(callback);
 
             reel.onStopSpinning.add(() => {
-                this.ticker.remove(callback)
+                this.ticker.remove(callback);
 
                 if (index === this.reels.length - 1) {
                     this.isSpinning = false;
+                    gameModel.game.signals.spinComplete.emit();
                 }
             });
         });
@@ -98,7 +101,7 @@ export default class ReelBoxControl extends MainControl {
         this.clearReels();
 
         for (let i = 0; i < this.reelsCount; i++) {
-            const reel = new ReelControl(this.symbolsPerReel, this.reelWidth, i);
+            const reel = new ReelControl(this.reelWidth, i);
 
             this.add(reel);
             this.reels.push(reel);

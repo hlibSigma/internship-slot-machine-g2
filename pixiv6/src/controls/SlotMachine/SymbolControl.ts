@@ -2,7 +2,7 @@ import MainControl from "app/controls/MainControl";
 import SpineControl from "app/controls/SpineControl";
 
 export default class SymbolControl extends MainControl {
-     readonly spine: SpineControl;
+    readonly spine: SpineControl;
 
     constructor(
         private readonly skin: string,
@@ -20,16 +20,6 @@ export default class SymbolControl extends MainControl {
 
     public spinTo(target: number, bounds: number) {
         this.spine.container.y = (target % bounds) * this.size;
-    }
-
-    private static getRandomSkin() {
-        const skins = [
-            "wild", "scatter",
-            "low1", "low2", "low3",
-            "high1", "high2", "high3",
-        ];
-
-        return skins[Math.floor(Math.random() * skins.length)];
     }
 
     private transformToFit() {

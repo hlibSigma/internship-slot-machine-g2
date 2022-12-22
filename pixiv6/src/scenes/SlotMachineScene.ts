@@ -1,20 +1,17 @@
 import { GameSize } from "app/model/GameModel";
 
 import BaseScene from "app/scenes/BaseScene";
-import BackgroundControl from "app/controls/BackgroundControl";
-import Resources from "app/pixi/StrictResourcesHelper";
 import ReelBoxControl from "app/controls/SlotMachine/ReelBoxControl";
 import TextButtonControl from "app/controls/button/TextButtonControl";
 import gameModel from "app/model/GameModel";
 import ChoiceScene from "app/scenes/ChoiceScene";
 import SceneManager from "app/scenes/SceneManager";
 import SlotMachineBackgroundScene from "app/scenes/SlotMachineBackgroundScene";
-import ReelScene from "app/scenes/subscenes/ReelScene";
 import BetPanelScene from "app/scenes/subscenes/BetPanelScene";
 
 export default class SlotMachineScene extends BaseScene {
     private readonly backgroundSceneManager = new SceneManager(this.app, true);
-    private readonly reelBox = new ReelBoxControl(5, 16, 1500);
+    private readonly reelBox = new ReelBoxControl(1500);
     private readonly textButtonControl = new TextButtonControl("Back");
     private readonly betPanelSceneManager = new SceneManager(this.app, true);
 
