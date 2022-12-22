@@ -1,0 +1,47 @@
+{"frames":{
+	"logo_bar.png":{
+		"frame":{"h":82,"w":244,"x":0,"y":368},
+		"sourceSize":{"h":82,"w":244},
+		"spriteSourceSize":{"h":82,"w":244,"x":0,"y":0},
+		"trimmed":false
+	},
+	"logo_fruit.png":{
+		"frame":{"h":86,"w":264,"x":657,"y":0},
+		"sourceSize":{"h":86,"w":264},
+		"spriteSourceSize":{"h":86,"w":264,"x":0,"y":0},
+		"trimmed":false
+	},
+	"logo_leaf_big.png":{
+		"frame":{"h":37,"w":64,"x":0,"y":454},
+		"sourceSize":{"h":37,"w":64},
+		"spriteSourceSize":{"h":37,"w":64,"x":0,"y":0},
+		"trimmed":false
+	},
+	"logo_leaf_small.png":{
+		"frame":{"h":47,"w":31,"x":68,"y":454},
+		"sourceSize":{"h":47,"w":31},
+		"spriteSourceSize":{"h":47,"w":31,"x":0,"y":0},
+		"trimmed":false
+	},
+	"logo_vertical.png":{
+		"frame":{"h":257,"w":202,"x":0,"y":107},
+		"sourceSize":{"h":257,"w":202},
+		"spriteSourceSize":{"h":257,"w":202,"x":0,"y":0},
+		"trimmed":false
+	},
+	"logo.png":{
+		"frame":{"h":103,"w":653,"x":0,"y":0},
+		"sourceSize":{"h":103,"w":653},
+		"spriteSourceSize":{"h":103,"w":653,"x":0,"y":0},
+		"trimmed":false
+	}
+},
+"meta":{
+	"app":"http://www.texturepacker.com",
+	"version":"1.0",
+	"image":"logo.png",
+	"format":"RGBA8888",
+	"size":{"w":1024,"h":512},
+	"scale":1
+}
+}

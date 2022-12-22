@@ -1,0 +1,64 @@
+{"frames": {
+
+"ghost-1.png":
+{
+	"frame": {"x":0,"y":0,"w":100,"h":100},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":100,"h":100},
+	"sourceSize": {"w":100,"h":100}
+},
+"ghost-2.png":
+{
+	"frame": {"x":100,"y":0,"w":100,"h":100},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":100,"h":100},
+	"sourceSize": {"w":100,"h":100}
+},
+"pacman-1.png":
+{
+	"frame": {"x":200,"y":0,"w":117,"h":117},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":117,"h":117},
+	"sourceSize": {"w":117,"h":117}
+},
+"pacman-2.png":
+{
+	"frame": {"x":317,"y":0,"w":117,"h":117},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":117,"h":117},
+	"sourceSize": {"w":117,"h":117}
+},
+"pacman-3.png":
+{
+	"frame": {"x":434,"y":0,"w":117,"h":117},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":117,"h":117},
+	"sourceSize": {"w":117,"h":117}
+},
+"pacman-4.png":
+{
+	"frame": {"x":551,"y":0,"w":117,"h":117},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":117,"h":117},
+	"sourceSize": {"w":117,"h":117}
+}},
+"animations": {
+	"ghost": ["ghost-1.png","ghost-2.png"],
+	"pacman": ["pacman-1.png","pacman-2.png","pacman-3.png","pacman-4.png"]
+},
+"meta": {
+	"app": "https://www.codeandweb.com/texturepacker",
+	"version": "1.0",
+	"image": "OS_atlas.png",
+	"format": "RGBA8888",
+	"size": {"w":668,"h":117},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:d928a2d6716e85f2bcc649f6db7e5af6:1e31efedf14795acd0ae7c319a317de0:1a6071e99aaf4c4fdb0ceb13bdcbdf9a$"
+}
+}

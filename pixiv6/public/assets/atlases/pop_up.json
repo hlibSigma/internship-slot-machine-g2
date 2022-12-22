@@ -1,0 +1,35 @@
+{"frames":{
+	"button.png":{
+		"frame":{"h":83,"w":275,"x":1436,"y":60},
+		"sourceSize":{"h":83,"w":275},
+		"spriteSourceSize":{"h":83,"w":275,"x":0,"y":0},
+		"trimmed":false
+	},
+	"frutebulous_.png":{
+		"frame":{"h":253,"w":1116,"x":0,"y":887},
+		"sourceSize":{"h":253,"w":1116},
+		"spriteSourceSize":{"h":253,"w":1116,"x":0,"y":0},
+		"trimmed":false
+	},
+	"pop_up_bg.png":{
+		"frame":{"h":883,"w":1432,"x":0,"y":0},
+		"sourceSize":{"h":883,"w":1432},
+		"spriteSourceSize":{"h":883,"w":1432,"x":0,"y":0},
+		"trimmed":false
+	},
+	"you_have_won.png":{
+		"frame":{"h":56,"w":377,"x":1436,"y":0},
+		"sourceSize":{"h":56,"w":377},
+		"spriteSourceSize":{"h":56,"w":377,"x":0,"y":0},
+		"trimmed":false
+	}
+},
+"meta":{
+	"app":"http://www.texturepacker.com",
+	"version":"1.0",
+	"image":"pop_up.png",
+	"format":"RGBA8888",
+	"size":{"w":2048,"h":2048},
+	"scale":1
+}
+}

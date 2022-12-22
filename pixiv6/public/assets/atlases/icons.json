@@ -1,0 +1,29 @@
+{"frames":{
+	"fruit1.png":{
+		"frame":{"h":407,"w":416,"x":431,"y":0},
+		"sourceSize":{"h":1920,"w":1920},
+		"spriteSourceSize":{"h":407,"w":416,"x":179,"y":281},
+		"trimmed":true
+	},
+	"fruit2.png":{
+		"frame":{"h":408,"w":363,"x":0,"y":431},
+		"sourceSize":{"h":1920,"w":1920},
+		"spriteSourceSize":{"h":408,"w":363,"x":794,"y":280},
+		"trimmed":true
+	},
+	"fruit3.png":{
+		"frame":{"h":427,"w":427,"x":0,"y":0},
+		"sourceSize":{"h":1920,"w":1920},
+		"spriteSourceSize":{"h":427,"w":427,"x":1349,"y":271},
+		"trimmed":true
+	}
+},
+"meta":{
+	"app":"http://www.texturepacker.com",
+	"version":"1.0",
+	"image":"icons.png",
+	"format":"RGBA8888",
+	"size":{"w":1024,"h":1024},
+	"scale":1
+}
+}

@@ -1,0 +1,29 @@
+{"frames":{
+	"blinky.png":{
+		"frame":{"h":300,"w":300,"x":603,"y":484},
+		"sourceSize":{"h":320,"w":320},
+		"spriteSourceSize":{"h":300,"w":300,"x":10,"y":10},
+		"trimmed":true
+	},
+	"enemyBoss.png":{
+		"frame":{"h":600,"w":599,"x":0,"y":484},
+		"sourceSize":{"h":600,"w":599},
+		"spriteSourceSize":{"h":600,"w":599,"x":0,"y":0},
+		"trimmed":false
+	},
+	"game_bg.png":{
+		"frame":{"h":480,"w":852,"x":0,"y":0},
+		"sourceSize":{"h":480,"w":852},
+		"spriteSourceSize":{"h":480,"w":852,"x":0,"y":0},
+		"trimmed":false
+	}
+},
+"meta":{
+	"app":"http://www.texturepacker.com",
+	"version":"1.0",
+	"image":"gPacmanIcons.png",
+	"format":"RGBA8888",
+	"size":{"w":1024,"h":2048},
+	"scale":1
+}
+}

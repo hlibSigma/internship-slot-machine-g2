@@ -1,0 +1,23 @@
+{"frames":{
+	"pack1.png":{
+		"frame":{"h":367,"w":367,"x":0,"y":0},
+		"sourceSize":{"h":369,"w":369},
+		"spriteSourceSize":{"h":367,"w":367,"x":1,"y":1},
+		"trimmed":true
+	},
+	"pack2.png":{
+		"frame":{"h":367,"w":347,"x":371,"y":0},
+		"sourceSize":{"h":369,"w":349},
+		"spriteSourceSize":{"h":367,"w":347,"x":1,"y":1},
+		"trimmed":true
+	}
+},
+"meta":{
+	"app":"http://www.texturepacker.com",
+	"version":"1.0",
+	"image":"pacman.png",
+	"format":"RGBA8888",
+	"size":{"w":1024,"h":512},
+	"scale":1
+}
+}
