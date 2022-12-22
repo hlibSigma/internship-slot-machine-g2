@@ -7,6 +7,7 @@ export default class SlotMashineTextControl extends ButtonControl {
     public readonly labelTitle: Text;
     public readonly labelValue: Text;
     private value: number = 0;
+    private arrayValue:Array<number>= [10, 15, 20, 30, 50, 100, 200, 300, 500];
     constructor(private title: string) {
         super(new Container());
         this.labelTitle = new Text(title, {
@@ -18,7 +19,7 @@ export default class SlotMashineTextControl extends ButtonControl {
             lineJoin: "round",
             strokeThickness: 2,
         });
-        this.labelValue = new Text(`$ ${ this.value}`,{
+        this.labelValue = new Text(`$ ${ this.arrayValue[this.value]}`,{
             fontFamily: "Neuron-Black",
             fill: "white",
             fontSize: 30,
@@ -42,5 +43,21 @@ export default class SlotMashineTextControl extends ButtonControl {
         this.container.removeChildren();
         super.dispose();
     }
+    increment() {
+        if(this.value != this.arrayValue.length -1){
+            this.value += 1;
+        } else {
+            this.value = 0;
+        }
+        this.labelValue.text = `$ ${ this.arrayValue[this.value]}`;
+    }
+    decrement() {
+        if(this.value != 0){
+            this.value -= 1;
+        } else {
+            this.value = this.arrayValue.length -1;
+        }
 
+        this.labelValue.text = `$ ${ this.arrayValue[this.value]}`;
+    }
 }

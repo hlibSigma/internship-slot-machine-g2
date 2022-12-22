@@ -6,7 +6,7 @@ import { Text } from "@pixi/text";
 export default class SlotMashineBalanceControl extends ButtonControl {
     public readonly labelTitle:Text;
     public readonly labelValue: Text;
-    private value: number = 0;
+    private value: number = 10000;
 
     constructor(private title:string) {
         super(new Container());

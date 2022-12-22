@@ -87,9 +87,11 @@ export default class BetPanelScene extends BaseScene {
         }, this);
         plusBtnControl.onClick.add(() => {
             gameModel.getHowler().play("custom-button");
+            betControl.increment();
         }, this);
         minusBtnControl.onClick.add(() => {
             gameModel.getHowler().play("custom-button");
+            betControl.decrement();
         }, this);
         gameModel.game.signals.spinComplete.add(this.onSpinComplete, this);
         gameModel.game.signals.betChanged.add(this.onBetChanged, this);
