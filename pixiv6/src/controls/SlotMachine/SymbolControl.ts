@@ -2,23 +2,24 @@ import MainControl from "app/controls/MainControl";
 import SpineControl from "app/controls/SpineControl";
 
 export default class SymbolControl extends MainControl {
-    private readonly spine: SpineControl;
+     readonly spine: SpineControl;
 
     constructor(
+        private readonly skin: string,
         private readonly size: number,
         private readonly offsetY = 0,
     ) {
         super();
 
         this.spine = new SpineControl("symbols");
-        this.spine.setSkin(SymbolControl.getRandomSkin());
+        this.spine.setSkin(skin);
 
         this.transformToFit();
         this.add(this.spine);
     }
 
     public spinTo(target: number, bounds: number) {
-        this.spine.container.y = (target % bounds) * this.size - this.size;
+        this.spine.container.y = (target % bounds) * this.size;
     }
 
     private static getRandomSkin() {

@@ -12,6 +12,9 @@ export default class ReelBoxControl extends MainControl {
     private readonly ticker = new Ticker();
     private readonly mask = new Graphics();
 
+    private reelsCount = 0;
+    private symbolsPerReel = 0;
+
     private get reelWidth() {
         return this.width / this.reelsCount;
     }
@@ -21,13 +24,21 @@ export default class ReelBoxControl extends MainControl {
     }
 
     constructor(
-        private reelsCount: number,
-        private symbolsPerReel: number,
         private width: number,
         private initialTime = 1000,
         private stopDelay = 300,
     ) {
         super();
+    }
+
+    async init() {
+        super.init();
+
+        await gameModel.ready;
+        const reelsInfo = gameModel.mainGameInfo.reels;
+
+        this.reelsCount = reelsInfo.amount;
+        this.symbolsPerReel = reelsInfo.height;
 
         this.generateReels();
         this.applyMask();

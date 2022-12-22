@@ -31,7 +31,7 @@ export class GameModel {
     public readonly startSpinning = new Signal<void>();
     public readonly reelBoxOnChangeHooks = [
         new OnChangeHook("reelsCount", 5),
-        new OnChangeHook("symbolsPerReel", 16),
+        new OnChangeHook("symbolsPerReel", 3),
         new OnChangeHook("width", 1500),
         new OnChangeHook("initialTime", 1000),
         new OnChangeHook("stopDelay", 300),
