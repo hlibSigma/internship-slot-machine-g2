@@ -25,11 +25,14 @@ export default class SlotMachineScene extends BaseScene {
             gameModel.getHowler().play("btn_click");
             this.sceneManager.navigate(ChoiceScene);
         }, this);
+        const reelSignals = gameModel.game.signals.reels;
+        reelSignals.spin.add(this.startSpin, this);
+        reelSignals.stop.add(this.stopSpinOn, this);
     }
+
     activate():void {
         super.activate();
         this.addControl(this.textButtonControl);
-
     }
 
     dispose() {
@@ -42,4 +45,15 @@ export default class SlotMachineScene extends BaseScene {
         super.onResize(gameSize);
         this.reelBox.container.position.copyFrom(gameSize.centerPosition);
     }
+
+    private async startSpin() {
+        await this.reelBox.startSpin();
+        gameModel.game.signals.spinStarted.emit();
+    }
+
+    private async stopSpinOn(reelStops: number[]) {
+        await this.reelBox.stopSpinOn(reelStops);
+        gameModel.game.signals.spinComplete.emit();
+    }
+
 }

@@ -10,12 +10,11 @@ export default class SymbolControl extends MainControl {
         private readonly offsetY = 0,
     ) {
         super();
-
         this.spine = new SpineControl("symbols");
         this.spine.setSkin(skin);
-
         this.transformToFit();
         this.add(this.spine);
+        this.spine.play("idle", {loop:true});
     }
 
     public spinTo(target: number, bounds: number) {

@@ -1,9 +1,12 @@
-import { Ticker } from "@pixi/ticker";
-import { Graphics } from "@pixi/graphics";
+import {Ticker} from "@pixi/ticker";
+import {Graphics} from "@pixi/graphics";
 
-import MainControl, { PivotType } from "app/controls/MainControl";
+import MainControl, {PivotType} from "app/controls/MainControl";
 import ReelControl from "app/controls/SlotMachine/ReelControl";
 import gameModel from "app/model/GameModel";
+import promiseHelper from "app/helpers/promise/ResolvablePromise";
+import {promiseDelay} from "app/helpers/TimeHelper";
+import gsap from "gsap";
 
 export default class ReelBoxControl extends MainControl {
     public isSpinning = false;
@@ -39,50 +42,56 @@ export default class ReelBoxControl extends MainControl {
         this.generateReels();
         this.applyMask();
         this.setupHooks();
-
-        gameModel.game.signals.reels.stop.add(this.spinTo, this);
-
-        this.ticker.start();
     }
 
     public async startSpinning() {
         if (this.isSpinning) {
             return;
         }
-
+        this.ticker.start();
         this.isSpinning = true;
     }
 
-    private spinTo(reelStops: number[]) {
-        const start = Date.now();
+    public async startSpin() {
+        await Promise.all(this.reels.map(async (reel, index) => {
+            await promiseDelay(125 * index);
+            gsap.to(reel.container, {duration: 0.35, y: -100, ease: "sine.inOut", yoyo: true, repeat: 2});
+            await promiseDelay(350);
+        }));
+    }
 
+    public async stopSpinOn(reelStops: number[]) {
+        await this.spinTo(reelStops);
+    }
+
+    private async spinTo(reelStops: number[]) {
+        this.ticker.start();
+        const start = Date.now();
+        const resolvablePromise = promiseHelper.getPromiseCounter<void>(this.reels.length);
         this.reels.forEach((reel, index) => {
+            gsap.killTweensOf(reel.container);
+            reel.container.y = 0;
             const stopIndex = reelStops[index]
             const target = reel.currentPosition + (this.reels.length - reel.currentPosition) + stopIndex;
             const time = this.initialTime + index * this.stopDelay;
-
             const callback = () => reel.spinTo(start, target, time);
-
             this.ticker.add(callback);
 
             reel.onStopSpinning.add(() => {
                 this.ticker.remove(callback);
-
-                if (index === this.reels.length - 1) {
-                    this.isSpinning = false;
-                    gameModel.game.signals.spinComplete.emit();
-                }
+                resolvablePromise.resolve();
             });
         });
+        await resolvablePromise;
+        this.ticker.stop();
+        this.isSpinning = false;
     }
 
     private setupHooks() {
         gameModel.startSpinning.add(this.startSpinning, this);
-
         for (const hook of gameModel.reelBoxOnChangeHooks) {
             hook.signal.add((value: any) => {
                 this[hook.propName as keyof this] = value;
-
                 this.generateReels();
                 this.updateMask();
             }, this);
@@ -111,7 +120,7 @@ export default class ReelBoxControl extends MainControl {
     }
 
     private updateMask() {
-        const { mask, container } = this;
+        const {mask, container} = this;
 
         mask.clear();
         mask.drawRect(
