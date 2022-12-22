@@ -5,47 +5,63 @@ import Signal from "app/helpers/signals/signal/Signal";
 import {Container} from "@pixi/display";
 import {Filter, Texture} from "@pixi/core";
 import {Sprite} from "@pixi/sprite";
+import StrictResourcesHelper from "app/pixi/StrictResourcesHelper";
 
-export type ButtonControlOptions = {hoverColor?:number, align?:PivotType, target?:any}
+export type ButtonControlOptions = {hoverColor?: number, align?: PivotType, target?: any}
 export default class ButtonControl extends MainControl {
-    public onClick:Signal<ButtonControl> = new Signal<ButtonControl>();
+    public readonly onClick: Signal<ButtonControl> = new Signal<ButtonControl>();
+    public readonly target: any;
 
-    private readonly button:Container;
-    private readonly sepiaColorFilter:ColorMatrixFilter;
-    private readonly additionalFilters:Array<Filter> = [];
-    public readonly target:any;
+    private readonly button: Container;
+    private readonly sepiaColorFilter: ColorMatrixFilter;
+    private readonly additionalFilters: Array<Filter> = [];
+    private readonly glowFilter: Filter;
 
-    constructor(texture:Texture | Container, opt?:ButtonControlOptions) {
+    constructor(texture: Texture | Container | string, opt?: ButtonControlOptions) {
         super();
         opt = opt ? opt : {};
         opt.hoverColor = opt.hoverColor === undefined ? 0xffffff : opt.hoverColor;
         opt.align = opt.align === undefined ? PivotType.TL : opt.align;
         this.target = opt.target;
+        if (typeof texture == "string") {
+            texture = StrictResourcesHelper.getSomeTexture(texture);
+        }
         this.button = texture instanceof Container ? texture : new Sprite(<Texture>texture);
         this.button.interactive = true;
         this.button.buttonMode = true;
-        let glowFilter:GlowFilter = new GlowFilter({
+        this.glowFilter = new GlowFilter({
             color: opt.hoverColor, outerStrength: 50, distance: 10, quality: 0.3
         });
         this.sepiaColorFilter = new ColorMatrixFilter();
         this.sepiaColorFilter.sepia(false);
-        this.button.on("pointerover", () => {
-            this.container.filters = [glowFilter, ...this.additionalFilters];
-        });
-        this.button.on("pointerout", () => {
-            this.container.filters = [...this.additionalFilters];
-        });
+
         // this.button.hitArea = new Polygon(getCirclePolygons(this.button.width * .5, 10));
-        this.button.on("pointerdown", () => {
-            if (this.isEnable()) {
-                this.onClick.emit(this);
-            }
-        });
+
         this.container.addChild(this.button);
         this.setPivotTo(this.button, opt.align);
     }
 
-    set hitArea(value:IHitArea) {
+    init() {
+        super.init();
+        this.container.on("pointerover", () => {
+            this.container.filters = [this.glowFilter, ...this.additionalFilters];
+        });
+        this.container.on("pointerout", () => {
+            this.container.filters = [...this.additionalFilters];
+        });
+        this.container.on("pointertap", () => {
+            console.log("pointertap");
+            if (this.isEnable()) {
+                console.log("emit");
+                this.onClick.emit(this);
+            }
+        });
+        this.container.interactive = true;
+        this.container.interactiveChildren = true;
+        this.container.buttonMode = true;
+    }
+
+    set hitArea(value: IHitArea) {
         this.button.hitArea = value;
     }
 
@@ -55,22 +71,21 @@ export default class ButtonControl extends MainControl {
 
     enable() {
         this.button.alpha = 1;
-        this.button.filters = [];
-        this.button.interactive = true;
-        this.button.buttonMode = true;
+        this.container.filters = [];
+        this.container.interactive = true;
+        this.container.buttonMode = true;
     }
 
     disable() {
         if (this.button.alpha === 1) {
-            this.button.filters = [this.sepiaColorFilter];
-            this.button.interactive = false;
-            this.button.buttonMode = false;
-            this.container.filters = [...this.additionalFilters];
-            this.button.alpha += 1;
+            this.container.interactive = false;
+            this.container.buttonMode = false;
+            this.container.filters = [this.sepiaColorFilter, ...this.additionalFilters];
+            this.button.alpha = 0.5;
         }
     }
 
-    addFilter(filter:Filter) {
+    addFilter(filter: Filter) {
         this.additionalFilters.push(filter);
         this.container.filters = [...this.additionalFilters];
     }
@@ -78,5 +93,5 @@ export default class ButtonControl extends MainControl {
 //todo: after new api of pixi will be released;
 // For now it is not export
 interface IHitArea {
-    contains(x:number, y:number):boolean;
+    contains(x: number, y: number): boolean;
 }

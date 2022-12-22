@@ -83,6 +83,10 @@ class ChoiceSceneLayout {
                             {
                                 name: "item1_2",
                                 extend: "item",
+                            },
+                            {
+                                name: "item1_3",
+                                extend: "item",
                             }
                         ]
                     },
@@ -96,6 +100,10 @@ class ChoiceSceneLayout {
                             },
                             {
                                 name: "item2_2",
+                                extend: "item",
+                            },
+                            {
+                                name: "item2_3",
                                 extend: "item",
                             }
                         ]
@@ -111,6 +119,10 @@ class ChoiceSceneLayout {
                             {
                                 name: "item3_2",
                                 extend: "item",
+                            },
+                            {
+                                name: "item3_3",
+                                extend: "item",
                             }
                         ]
                     },
@@ -125,6 +137,10 @@ class ChoiceSceneLayout {
                             {
                                 name: "item4_2",
                                 extend: "item",
+                            },
+                            {
+                                name: "item4_3",
+                                extend: "item",
                             }
                         ]
                     },
@@ -138,6 +154,46 @@ class ChoiceSceneLayout {
                             },
                             {
                                 name: "item5_2",
+                                extend: "item",
+                            },
+                            {
+                                name: "item5_3",
+                                extend: "item",
+                            }
+                        ]
+                    },
+                    {
+                        name: "line2",
+                        extend: "line",
+                        layouts: [
+                            {
+                                name: "item6_1",
+                                extend: "item",
+                            },
+                            {
+                                name: "item6_2",
+                                extend: "item",
+                            },
+                            {
+                                name: "item6_3",
+                                extend: "item",
+                            }
+                        ]
+                    },
+                    {
+                        name: "line2",
+                        extend: "line",
+                        layouts: [
+                            {
+                                name: "item7_1",
+                                extend: "item",
+                            },
+                            {
+                                name: "item7_2",
+                                extend: "item",
+                            },
+                            {
+                                name: "item7_3",
                                 extend: "item",
                             }
                         ]

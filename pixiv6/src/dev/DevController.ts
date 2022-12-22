@@ -8,6 +8,7 @@ import DevPixiDrawLayoutPlugin from "app/layoutManager/DevPixiDrawLayoutPlugin";
 import dependencyManager from "app/model/injection/InjectDecorator";
 import LayoutManager from "app/layoutManager/LayoutManager";
 import DevToolUtils from "app/dev/DevToolUtils";
+import sounds from "res/sounds/SOUND_FILE.soundmap.json";
 
 export default class DevController {
     private stats: Stats = new Stats();
@@ -16,6 +17,7 @@ export default class DevController {
         this.setupStats();
         const gui = new GUI();
         this.setupGeneralHooks(gui);
+        this.setupSlotMachineHooks(gui);
         this.setupPacmanHooks(gui);
         this.setupSounds(gui);
         gui.add({
@@ -49,6 +51,19 @@ export default class DevController {
                 }
             }, "show layouts");
         }, "dev tools");
+    }
+
+    private setupSlotMachineHooks(gui: GUI) {
+        const SlotMachineGui = gui.addFolder("Slot Machine");
+
+        SlotMachineGui.add({
+            startSpinning: () => gameModel.startSpinning.emit(),
+        }, "startSpinning");
+
+        for (const hook of gameModel.reelBoxOnChangeHooks) {
+            SlotMachineGui.add(hook.target, hook.propName)
+                          .onChange(value => hook.signal.emit(value));
+        }
     }
 
     private setupPacmanHooks(gui: GUI) {
@@ -101,6 +116,7 @@ export default class DevController {
 
     private setupSounds(gui: GUI) {
         let howler = gameModel.getHowler();
+        let soundIdItems = Object.getOwnPropertyNames(sounds.sprite);
         let id: number;
         let target = {
             rate: 1,
@@ -120,7 +136,7 @@ export default class DevController {
                 howler.volume(data);
             },
             soundId: "success",
-            _soundIdItems: ["success", "relax_loop"],
+            _soundIdItems: soundIdItems,
             play: () => {
                 id = howler.play(target.soundId);
             },

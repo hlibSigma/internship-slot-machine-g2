@@ -4,12 +4,38 @@ import constructor from "app/model/ContructortTypes";
 import sounds from "res/sounds/SOUND_FILE.soundmap.json";
 import {Howl} from 'howler';
 import dependencyManager from "app/model/injection/InjectDecorator";
+import {TFullUserData, TInitResponse, TResponse, TSpinResponse} from "app/server/fruit/service/typing";
+import ServerCommunicator from "app/server/fruit/ServerCommunicator";
+import GameSignals from "app/model/GameSignals";
 
 type InjectionType<T extends MainControl> = Function & {prototype:T};
 
 export type TOrientation = "down" | "up" | "left" | "right";
 
+type TInitGameData = TInitResponse;
+
+class OnChangeHook<T> {
+    public readonly signal = new Signal<T>();
+
+    constructor(
+        public readonly propName: string,
+        public readonly defaultValue: T,
+    ) {}
+
+    public get target() {
+        return { [this.propName]: this.defaultValue };
+    }
+}
+
 export class GameModel {
+    public readonly startSpinning = new Signal<void>();
+    public readonly reelBoxOnChangeHooks = [
+        new OnChangeHook("reelsCount", 5),
+        new OnChangeHook("symbolsPerReel", 16),
+        new OnChangeHook("width", 1500),
+        new OnChangeHook("initialTime", 1000),
+        new OnChangeHook("stopDelay", 300),
+    ];
 
     public readonly updateOrientation:Signal<TOrientation> = new Signal<TOrientation>();
     public readonly setSpeedFactor:Signal<number> = new Signal<number>();
@@ -19,6 +45,25 @@ export class GameModel {
     public readonly updateLayout:Signal<GameSize> = new Signal<GameSize>();
     public readonly pauseGame:Signal<{pause:boolean}> = new Signal<{pause:boolean}>();
     private howler:Howl = <any>{};
+    public readonly game = {
+        fruit: {
+            serverCommunicator: new ServerCommunicator("https://us-central1-internship-slot-backend.cloudfunctions.net/app/"),
+        },
+        signals: new GameSignals()
+    };
+    //todo: it should be done by a server response [#17];
+    mainGameInfo: (TInitGameData & {reels:{amount:number, height:number}}) = <any>{};
+
+    public readonly ready:Promise<void>;
+    constructor() {
+        this.ready = new Promise<void>(async resolve => {
+            let response = await this.game.fruit.serverCommunicator.login("Lo");
+            this.mainGameInfo = Object.assign(response, {
+                reels:{amount:5, height:3}
+            });
+            resolve();
+        })
+    }
 
     getHowler():Howl {
         return this.howler;
