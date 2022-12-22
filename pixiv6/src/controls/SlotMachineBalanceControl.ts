@@ -5,6 +5,9 @@ import { Text } from "@pixi/text";
 
 export default class SlotMashineBalanceControl extends ButtonControl {
     public readonly labelTitle:Text;
+    public readonly labelValue: Text;
+    private value: number = 0;
+
     constructor(private title:string) {
         super(new Container());
         this.labelTitle = new Text(title,{
@@ -16,8 +19,19 @@ export default class SlotMashineBalanceControl extends ButtonControl {
             lineJoin: "round",
             strokeThickness: 2,
         });
+        this.labelValue = new Text(`$ ${ this.value}`,{
+            fontFamily: "Neuron-Black",
+            fill: "white",
+            fontSize: 30,
+            fontWeight: "bold",
+            letterSpacing: -1,
+            lineJoin: "round",
+            strokeThickness: 2,
+        });
         this.labelTitle.pivot.set(this.labelTitle.width * .5, this.labelTitle.height* 1.5);
+        this.labelValue.pivot.set(this.labelValue.width * .5, this.labelValue.height* .5);
         this.container.addChild(this.labelTitle);
+        this.container.addChild(this.labelValue);
     }
 
     init() {
