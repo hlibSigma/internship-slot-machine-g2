@@ -12,7 +12,7 @@ import SlotMashineBalanceControl from "app/controls/SlotMachineBalanceControl";
 
 const layout: PartialLayout = {
     name: "body",
-    width: "70%",
+    width: "60%",
     height: "20%",
     top: "70%",
     left: "20%",
@@ -65,8 +65,8 @@ export default class BetPanelScene extends BaseScene {
     private spinBtnControl: SpinBtnControl = new SpinBtnControl();
     private plusBtnControl: PlusBtnControl = new PlusBtnControl();
     private minusBtnControl: MinusBtnControl = new MinusBtnControl();
-    private betControl = new SlotMashineTextControl();
-    private BalanceLabelControl: SlotMashineBalanceControl = new SlotMashineBalanceControl();
+    private betControl = new SlotMashineTextControl("BET");
+    private BalanceLabelControl: SlotMashineBalanceControl = new SlotMashineBalanceControl("BALANCE");
 
 
     async compose() {
@@ -123,10 +123,4 @@ export default class BetPanelScene extends BaseScene {
         gameModel.game.signals.reels.stop.emit(tSpinResponse.userStats.reelStops);
     }
 
-    protected onResize(gameSize: GameSize) {
-        super.onResize(gameSize);
-        this.currentWidth = gameSize.width;
-        this.currentHeight = gameSize.height;
-
-    }
 }
