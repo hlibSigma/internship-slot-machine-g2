@@ -20,7 +20,7 @@ export default class SlotMachineScene extends BaseScene {
     private reelSceneManager = new SceneManager(this.app, true);
     private betPanelSceneManager = new SceneManager(this.app, true);
 
-    compose() {
+    async compose() {
         this.addControl(this.background);
         this.addControl(this.reelBox);
         this.backgroundSceneManager.navigate(SMBackgroundScene);
