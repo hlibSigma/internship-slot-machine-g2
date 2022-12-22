@@ -13,19 +13,15 @@ import ReelScene from "app/scenes/subscenes/ReelScene";
 import BetPanelScene from "app/scenes/subscenes/BetPanelScene";
 
 export default class SlotMachineScene extends BaseScene {
-    private readonly background = new BackgroundControl(Resources.getSomeTexture("bg.png"));
+    private readonly backgroundSceneManager = new SceneManager(this.app, true);
     private readonly reelBox = new ReelBoxControl(5, 16, 1500);
-    private textButtonControl = new TextButtonControl("Back");
-    private backgroundSceneManager = new SceneManager(this.app, true);
-    private reelSceneManager = new SceneManager(this.app, true);
-    private betPanelSceneManager = new SceneManager(this.app, true);
+    private readonly textButtonControl = new TextButtonControl("Back");
+    private readonly betPanelSceneManager = new SceneManager(this.app, true);
 
     async compose() {
-        this.addControl(this.background);
-        this.addControl(this.reelBox);
         this.backgroundSceneManager.navigate(SlotMachineBackgroundScene);
-        this.reelSceneManager.navigate(ReelScene);
         this.betPanelSceneManager.navigate(BetPanelScene);
+        this.addControl(this.reelBox);
         await gameModel.ready;
         this.textButtonControl.container.position.set(100, 100);
         this.textButtonControl.onClick.add(() => {
@@ -40,9 +36,8 @@ export default class SlotMachineScene extends BaseScene {
     }
 
     dispose() {
-        this.backgroundSceneManager.dispose();
-        this.reelSceneManager.dispose();
         this.betPanelSceneManager.dispose();
+        this.backgroundSceneManager.dispose();
         super.dispose();
     }
 
