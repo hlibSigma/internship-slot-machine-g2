@@ -13,7 +13,7 @@ import ReelScene from "app/scenes/subscenes/ReelScene";
 import BetPanelScene from "app/scenes/subscenes/BetPanelScene";
 
 export default class SlotMachineScene extends BaseScene {
-    private readonly background = new BackgroundControl(Resources.getSingleTexture("SLOT-MASHINE_BG"));
+    private readonly background = new BackgroundControl(Resources.getSomeTexture("bg.png"));
     private readonly reelBox = new ReelBoxControl(5, 16, 1500);
     private textButtonControl = new TextButtonControl("Back");
     private backgroundSceneManager = new SceneManager(this.app, true);
