@@ -8,7 +8,7 @@ import TextButtonControl from "app/controls/button/TextButtonControl";
 import gameModel from "app/model/GameModel";
 import ChoiceScene from "app/scenes/ChoiceScene";
 import SceneManager from "app/scenes/SceneManager";
-import SMBackgroundScene from "app/scenes/SMBackgroundScene";
+import SlotMachineBackgroundScene from "app/scenes/SlotMachineBackgroundScene";
 import ReelScene from "app/scenes/subscenes/ReelScene";
 import BetPanelScene from "app/scenes/subscenes/BetPanelScene";
 
@@ -23,7 +23,7 @@ export default class SlotMachineScene extends BaseScene {
     async compose() {
         this.addControl(this.background);
         this.addControl(this.reelBox);
-        this.backgroundSceneManager.navigate(SMBackgroundScene);
+        this.backgroundSceneManager.navigate(SlotMachineBackgroundScene);
         this.reelSceneManager.navigate(ReelScene);
         this.betPanelSceneManager.navigate(BetPanelScene);
         await gameModel.ready;

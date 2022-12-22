@@ -4,7 +4,7 @@ import Resources from "app/pixi/StrictResourcesHelper";
 import { SpriteControl } from "app/controls/SpriteControl";
 import StrictResourcesHelper from "app/pixi/StrictResourcesHelper";
 
-export default class SMBackgroundScene extends BaseScene {
+export default class SlotMachineBackgroundScene extends BaseScene {
     private background = new BackgroundControl(Resources.getSingleTexture("SLOT-MASHINE_BG"));
     private logo: any;
     compose(): void {
