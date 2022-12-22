@@ -5,25 +5,25 @@ import {inject} from "app/model/injection/InjectDecorator";
 import gameModel from "app/model/GameModel";
 import {promiseDelay} from "app/helpers/TimeHelper";
 
-const layout:PartialLayout = {
+const layout: PartialLayout = {
     name: "body",
-    width:"80%",
-    height:"20%",
-    top:"80%",
-    left:"10%",
-    layouts:[
+    width: "80%",
+    height: "20%",
+    top: "80%",
+    left: "10%",
+    layouts: [
         {
-            name:"spin_btn",
-            height:"90%",
-            scaleBy:"height",
-            top:"45%",
-            align:"c",
+            name: "spin_btn",
+            height: "90%",
+            scaleBy: "height",
+            top: "45%",
+            align: "c",
         }
     ]
 }
 export default class BetPanelScene extends BaseScene {
     @inject(LayoutManager)
-    private layoutManager:LayoutManager = <any>{};
+    private layoutManager: LayoutManager = <any>{};
     private betId: number = 1;
     private spinBtnControl: SpinBtnControl = new SpinBtnControl();
 
@@ -35,6 +35,7 @@ export default class BetPanelScene extends BaseScene {
         spinBtnControl.enable();
         spinBtnControl.onClick.add(this.onSpinRequest, this);
         gameModel.game.signals.spinComplete.add(this.onSpinComplete, this);
+        gameModel.game.signals.betChanged.add(this.onBetChanged, this);
     }
 
     activate() {
@@ -49,6 +50,10 @@ export default class BetPanelScene extends BaseScene {
 
     private onSpinComplete() {
         this.spinBtnControl.enable();
+    }
+
+    private async onBetChanged(betId: number) {
+        this.betId = betId;
     }
 
     private async onSpinRequest() {
