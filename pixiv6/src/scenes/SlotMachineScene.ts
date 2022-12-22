@@ -42,8 +42,8 @@ export default class SlotMachineScene extends BaseScene {
     }
 
     protected onResize(gameSize: GameSize) {
-        super.onResize(gameSize);
-        this.reelBox.container.position.copyFrom(gameSize.centerPosition);
+         super.onResize(gameSize);
+         this.reelBox.container.position.copyFrom(gameSize.centerPosition);
     }
 
     private async startSpin() {
