@@ -1,9 +1,9 @@
 import BaseScene from "app/scenes/BaseScene";
 import SpinBtnControl from "app/controls/button/SpinBtnControl";
-import LayoutManager, {PartialLayout} from "app/layoutManager/LayoutManager";
-import {inject} from "app/model/injection/InjectDecorator";
-import gameModel from "app/model/GameModel";
-import {promiseDelay} from "app/helpers/TimeHelper";
+import LayoutManager, { PartialLayout } from "app/layoutManager/LayoutManager";
+import { inject } from "app/model/injection/InjectDecorator";
+import gameModel, { GameSize } from "app/model/GameModel";
+import { promiseDelay } from "app/helpers/TimeHelper";
 import SlotMashineBalanceControl from "app/controls/SlotMachineBalanceControl";
 import SlotMashineTotalBetControl from "app/controls/SlotMachineTotalBetControl";
 import SlotMashineWinControl from "app/controls/SlotMachineWinControl";
@@ -21,30 +21,30 @@ const layout: PartialLayout = {
         {
             name: "balance",
             width: "100%",
-            height:"100%",
-        },{
+            height: "100%",
+        }, {
             name: "bet-selector-con",
             width: "100%",
-            height:"100%",
-            layouts:[{
+            height: "100%",
+            layouts: [{
                 name: "bet-selector",
                 width: "100%",
-                height:"75%",
-                top:"50%",
-                left:"50%",
+                height: "75%",
+                top: "50%",
+                left: "50%",
             }]
-        },{
+        }, {
             name: "total-win",
             width: "100%",
-            height:"100%",
-        },{
+            height: "100%",
+        }, {
             name: "total-win",
             width: "100%",
-            height:"100%",
-        },{
+            height: "100%",
+        }, {
             name: "total-win",
             width: "20%",
-            height:"100%",
+            height: "100%",
         },
     ]
 }
@@ -101,10 +101,19 @@ export default class BetPanelScene extends BaseScene {
     }
 
     private async onSpinRequest() {
+        gameModel.getHowler().play("reel-spin")
         this.spinBtnControl.disable();
         gameModel.game.signals.reels.spin.emit();
         const tSpinResponse = await gameModel.game.fruit.serverCommunicator.spin(this.betId);
         await promiseDelay(500);
         gameModel.game.signals.reels.stop.emit(tSpinResponse.userStats.reelStops);
+    }
+
+    protected onResize(gameSize: GameSize) {
+        super.onResize(gameSize);
+        this.spinBtnControl.container.position.set(
+            gameSize.width * .87,
+            gameSize.height * .9
+        )
     }
 }
