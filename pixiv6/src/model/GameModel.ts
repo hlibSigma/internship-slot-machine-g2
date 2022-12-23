@@ -4,13 +4,14 @@ import constructor from "app/model/ContructortTypes";
 import sounds from "res/sounds/SOUND_FILE.soundmap.json";
 import {Howl} from 'howler';
 import dependencyManager from "app/model/injection/InjectDecorator";
-import {TFullUserData, TInitResponse, TResponse, TSpinResponse} from "app/server/fruit/service/typing";
+import {TInitResponse} from "app/server/fruit/service/typing";
 import ServerCommunicator from "app/server/fruit/ServerCommunicator";
 import GameSignals from "app/model/GameSignals";
 
 type InjectionType<T extends MainControl> = Function & {prototype:T};
 
 export type TOrientation = "down" | "up" | "left" | "right";
+export type TReelBoxSize = {width: number, height: number};
 
 type TInitGameData = TInitResponse;
 
@@ -29,10 +30,10 @@ class OnChangeHook<T> {
 
 export class GameModel {
     public readonly startSpinning = new Signal<void>();
+    public readonly reelBoxSize = new Signal<TReelBoxSize>();
+
     public readonly reelBoxOnChangeHooks = [
-        new OnChangeHook("reelsCount", 5),
-        new OnChangeHook("symbolsPerReel", 3),
-        new OnChangeHook("width", 1500),
+        new OnChangeHook("width", 1100),
         new OnChangeHook("initialTime", 1000),
         new OnChangeHook("stopDelay", 300),
     ];
