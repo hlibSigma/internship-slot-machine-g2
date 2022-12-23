@@ -73,11 +73,9 @@ export default class BetPanelScene extends BaseScene {
         spinBtnControl.disable();
         await gameModel.ready;
         spinBtnControl.enable();
-        spinBtnControl.onClick.add(() => {
-            this.onSpinRequest();
-            gameModel.getHowler().play("spin-button");
-        }, this);
+        spinBtnControl.onClick.add(this.onSpinBtnClick, this);
         spinBtnControl.enable();
+        gameModel.startSpinning.add(this.onSpinBtnClick, this);
         gameModel.game.signals.spinComplete.add(this.onSpinComplete, this);
         gameModel.game.signals.betChanged.add(this.onBetChanged, this);
     }
@@ -90,6 +88,11 @@ export default class BetPanelScene extends BaseScene {
     deactivate() {
         this.layoutManager.removeLayout(layout)
         super.dispose();
+    }
+
+    private onSpinBtnClick() {
+        this.onSpinRequest();
+        gameModel.getHowler().play("spin-button");
     }
 
     private onSpinComplete() {
