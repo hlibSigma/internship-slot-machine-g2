@@ -9,7 +9,7 @@ import {promiseDelay} from "app/helpers/TimeHelper";
 import gsap from "gsap";
 
 export default class ReelBoxControl extends MainControl {
-    private readonly reels: ReelControl[] = [];
+    public readonly reels: ReelControl[] = [];
     private readonly ticker = new Ticker();
     private readonly mask = new Graphics();
 

@@ -60,4 +60,12 @@ export default class ReelControl extends MainControl {
             this.createSymbol(i, symbolData.name.toLowerCase());
         }
     }
+
+    getSymbol(y: number) {
+        return this.symbols[y];
+    }
+
+    playForAll(animation: string) {
+        this.symbols.forEach(value => value.spine.play(animation));
+    }
 }

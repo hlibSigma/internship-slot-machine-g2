@@ -18,4 +18,5 @@ export default class GameSignals {
         stopReel: new Signal<TResponse>(),
         buyAmount: new Signal<TResponse>(),
     };
+    public readonly spinWinPresentationComplete = new Signal<void>();
 }

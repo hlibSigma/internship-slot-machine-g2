@@ -63,4 +63,8 @@ export default class ReelControl extends MainControl {
             symbol.play("idle", {loop: true});
         }));
     }
+
+    getSymbol(y: number) {
+        return this.symbols[y];
+    }
 }
