@@ -9,8 +9,6 @@ import {promiseDelay} from "app/helpers/TimeHelper";
 import gsap from "gsap";
 
 export default class ReelBoxControl extends MainControl {
-    public isSpinning = false;
-
     private readonly reels: ReelControl[] = [];
     private readonly ticker = new Ticker();
     private readonly mask = new Graphics();
@@ -42,14 +40,6 @@ export default class ReelBoxControl extends MainControl {
         this.generateReels();
         this.applyMask();
         this.setupHooks();
-    }
-
-    public async startSpinning() {
-        if (this.isSpinning) {
-            return;
-        }
-        this.ticker.start();
-        this.isSpinning = true;
     }
 
     public async startSpin() {
@@ -84,11 +74,9 @@ export default class ReelBoxControl extends MainControl {
         });
         await resolvablePromise;
         this.ticker.stop();
-        this.isSpinning = false;
     }
 
     private setupHooks() {
-        gameModel.startSpinning.add(this.startSpinning, this);
         for (const hook of gameModel.reelBoxOnChangeHooks) {
             hook.signal.add((value: any) => {
                 this[hook.propName as keyof this] = value;
@@ -115,6 +103,11 @@ export default class ReelBoxControl extends MainControl {
             this.add(reel);
             this.reels.push(reel);
         }
+
+        gameModel.reelBoxSize.emit({
+            width: this.width,
+            height: this.height,
+        });
 
         this.setPivotTo(this.container, PivotType.C);
     }

@@ -11,7 +11,7 @@ import BetPanelScene from "app/scenes/subscenes/BetPanelScene";
 
 export default class SlotMachineScene extends BaseScene {
     private readonly backgroundSceneManager = new SceneManager(this.app, true);
-    private readonly reelBox = new ReelBoxControl(1500);
+    private readonly reelBox = new ReelBoxControl(1100);
     private readonly textButtonControl = new TextButtonControl("Back");
     private readonly betPanelSceneManager = new SceneManager(this.app, true);
 
