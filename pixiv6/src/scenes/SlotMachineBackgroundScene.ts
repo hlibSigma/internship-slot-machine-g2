@@ -6,7 +6,7 @@ import {SpriteControl} from "app/controls/SpriteControl";
 export default class SlotMachineBackgroundScene extends BaseScene {
 
     private readonly background: BackgroundControl = new BackgroundControl(Resources.getSomeTexture("bg.png"));
-    private readonly logo: SpriteControl = new SpriteControl("logo_vertical.png", {x: -1, y: -0.5});
+    private readonly logo: SpriteControl = new SpriteControl("logo_vertical.png", {x: -0.5, y: -0.4});
 
     compose(): void {
         this.addControl(this.background);
