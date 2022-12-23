@@ -8,12 +8,14 @@ import ChoiceScene from "app/scenes/ChoiceScene";
 import SceneManager from "app/scenes/SceneManager";
 import SlotMachineBackgroundScene from "app/scenes/SlotMachineBackgroundScene";
 import BetPanelScene from "app/scenes/subscenes/BetPanelScene";
+import {TSpinResponse} from "app/server/fruit/service/typing";
 
 export default class SlotMachineScene extends BaseScene {
     private readonly backgroundSceneManager = new SceneManager(this.app, true);
     private readonly reelBox = new ReelBoxControl(1100);
     private readonly textButtonControl = new TextButtonControl("Back");
     private readonly betPanelSceneManager = new SceneManager(this.app, true);
+    private spinOutcome: TSpinResponse | undefined;
 
     async compose() {
         this.backgroundSceneManager.navigate(SlotMachineBackgroundScene);
@@ -28,6 +30,7 @@ export default class SlotMachineScene extends BaseScene {
         const reelSignals = gameModel.game.signals.reels;
         reelSignals.spin.add(this.startSpin, this);
         reelSignals.stop.add(this.stopSpinOn, this);
+        gameModel.game.signals.spinComplete.add(this.onSpinComplete, this);
     }
 
     activate():void {
@@ -54,6 +57,31 @@ export default class SlotMachineScene extends BaseScene {
     private async stopSpinOn(reelStops: number[]) {
         await this.reelBox.stopSpinOn(reelStops);
         gameModel.game.signals.spinComplete.emit();
+    }
+
+    private async onSpinComplete() {
+        const outcome = this.spinOutcome;
+        if (!outcome) {
+            return;
+        }
+        if (outcome.wins.length + outcome.scatterWins.length == 0) {
+            return;
+        }
+        const reels = this.reelBox.reels;
+        await Promise.all(outcome.scatterWins.map(async win => {
+            await Promise.all(win.symbols.map(async symbol => {
+                await reels[symbol.x].getSymbol(symbol.y).spine.play("win");
+            }));
+        }));
+        await Promise.all(outcome.wins.map(async win => {
+            await Promise.all(gameModel.mainGameInfo.lines[win.lineId].map(async (lineOffset, index) => {
+                if (index < win.symbolsAmount) {
+                    await reels[index].getSymbol(lineOffset).spine.play("win");
+                }
+            }));
+        }));
+        reels.forEach(value => value.playForAll("idle"));
+        gameModel.game.signals.spinWinPresentationComplete.emit();
     }
 
 }
